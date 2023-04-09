@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
 import { PencilIcon, BackwardIcon } from "@heroicons/react/24/solid";
 
 function ImageUploader(props) {
