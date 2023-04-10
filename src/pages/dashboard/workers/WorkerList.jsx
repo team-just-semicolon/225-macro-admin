@@ -7,28 +7,47 @@ import {
     Chip,
     Button
 } from "@material-tailwind/react";
+import Pagination from "./Pagination";
 import { tableDataDummy } from "@/data";
 
 export default function WorkerList(props) {
     const { handleCreateTaskClick } = props;
-    // const [workList, setWorkList] = useState("");
+    const [workers, setWorkers] = useState();
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(20);
 
-    useEffect(() => {
-        fetch(`http://141.164.51.175:225/api/vm?page=2&size=5 `, {
+    const getWorkers = async (page, size) => {
+        try {
+          const response = await fetch(`http://141.164.51.175:225/api/vm?page=${page}&size=${size}&direction=ASC`, {
             method: 'GET',
             headers: {
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data.data.content))
-            // .then((data) => setWorkList(data.data.content))
-            .catch((error) => console.error("Error fetching client count:", error));
-    }, []);
+              'Content-Type': 'application/json'
+            }
+          });
+          const data = await response.json();
+          return data.data.content;
+        } catch (error) {
+          console.error('Error fetching workers:', error);
+          return [];
+        }
+      }
+
 
     useEffect(() => {
-        console.log(tableDataDummy);
-    }, []);
+        async function fetchWorkers() {
+          const workers = await getWorkers(page, size);
+          const workersWithIndex = workers.map((worker, index) => {
+            return { ...worker, index: index + 1 };
+          });
+          setWorkers(workersWithIndex);
+        }
+        fetchWorkers();
+      }, [page, size]);
+
+
+    // useEffect(() => {
+    //     setWorkers(tableDataDummy);
+    // }, []);
 
 
     return (
@@ -68,9 +87,9 @@ export default function WorkerList(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {tableDataDummy && tableDataDummy.map(
-                            ({ machineNumber, machineID, createdAt, updatedAt, status, number, ip, mac, clients, online, date }, key) => {
-                                const className = `py-3 px-5 ${key === tableDataDummy.length - 1
+                        {workers && workers.map(
+                            ({ index, machineID, createdAt, updatedAt, status, number, ip, mac, clients, online, date }, key) => {
+                                const className = `py-3 px-5 ${key === workers.length - 1
                                     ? ""
                                     : "border-b border-blue-gray-50"
                                     }`;
@@ -82,7 +101,7 @@ export default function WorkerList(props) {
                                                 <div
                                                     className="bg-gray-200 w-8 py-2 px-1 rounded-md text-center"
                                                 >
-                                                    {machineNumber}
+                                                    {index}
                                                 </div>
                                             </div>
                                         </td>
@@ -110,6 +129,11 @@ export default function WorkerList(props) {
                         )}
                     </tbody>
                 </table>
+                <Pagination
+                        workers={workers}
+                        page={page}
+                        setPage={setPage}
+                    />
             </CardBody>
         </Card>
     )

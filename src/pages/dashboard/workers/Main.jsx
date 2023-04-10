@@ -2,7 +2,6 @@ import { useState } from "react";
 import Modal from "react-modal";
 
 import WorkerList from "./WorkerList";
-import ClientList from "./ClientList";
 import JobConsult from "./JobConsult";
 
 export default function List() {
@@ -20,7 +19,6 @@ export default function List() {
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
       <WorkerList handleCreateTaskClick={handleCreateTaskClick}  />
-      <ClientList />
       <Modal
         isOpen={showModal}
         onRequestClose={handleModalClose}

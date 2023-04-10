@@ -8,7 +8,7 @@ import {
   ComputerDesktopIcon
 } from "@heroicons/react/24/solid";
 import { Home, Profile, Notifications } from "@/pages/dashboard";
-import Machines from "@/pages/dashboard/machines/Main";
+import Workers from "@/pages/dashboard/workers/Main";
 import Tasks from "@/pages/dashboard/Tasks/Main";
 import WorkerDetail from "@/pages/dashboard/machines/Detail";
 // import ConnectOption from "@/pages/dashboard/order/connectOption";
@@ -43,9 +43,9 @@ export const routes = [
       // },
       {
         icon: <ComputerDesktopIcon {...icon} />,
-        name: "Machines",
-        path: "/Machines",
-        element: <Machines />,
+        name: "Workers",
+        path: "/Workers",
+        element: <Workers />,
       },
       {
         icon: <ComputerDesktopIcon {...icon} />,
