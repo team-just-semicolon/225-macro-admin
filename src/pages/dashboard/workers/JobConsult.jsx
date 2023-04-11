@@ -20,7 +20,7 @@ export function JobConsult(props) {
   const [operationInterval, setOperationInterval] = useState();
   const [clientOperationCount, setClientOperationCount] = useState("");
 
-  const [endTime, setEndTime] = useState();
+  const [endTime, setEndTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const [img, setImg] = useState();
@@ -140,14 +140,14 @@ export function JobConsult(props) {
             <Card key={'2'} color="transparent" shadow={false} className="flex-grow">
               <CardBody className="p-4">
                 <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-                  키워드
+                  영상 제목
                 </Typography>
                 <Typography variant="small" className="text-blue-gray-500">
-                  영상을 찾기 위해 검색할 키워드를 입력해주세요. 해당 키워드로 유투브에서 영상 리스트를 조회 합니다.
+                  영상을 찾기 위해 영상의 제목을 입력해주세요. 해당 키워드로 유투브에서 방송중인 영상을 찾습니다.
                 </Typography>
               </CardBody>
               <div className="flex-grow">
-                <Input required size="md" label="검색 키워드" className="h-full w-full" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <Input required size="md" label="영상 제목" className="h-full w-full" value={title} onChange={(e) => setTitle(e.target.value)} />
               </div>
             </Card>
             <Card key={'3'} color="transparent" shadow={false} style={{ flexGrow: 1 }}>
@@ -175,11 +175,12 @@ export function JobConsult(props) {
               <div className="flex-grow">
                 {showTimePicker ? (
                   <TimePicker
-                    initialTime={new Date()} setEndTime={setEndTime} showTimePicker={showTimePicker} setShowTimePicker={setShowTimePicker}
+                    initialTime={new Date()} endTime={endTime} setEndTime={setEndTime} showTimePicker={showTimePicker} setShowTimePicker={setShowTimePicker}
                   />
                 ) : (
                   <Input
                     required
+                    readOnly={true}
                     size="md"
                     label="시간 선택"
                     className="h-full w-full"
@@ -191,8 +192,6 @@ export function JobConsult(props) {
                       minute: "2-digit",
                       hour12: true,
                     })
-
-
                     }
                     onClick={() => setShowTimePicker(true)}
                   />
