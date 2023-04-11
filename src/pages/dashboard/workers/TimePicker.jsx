@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function TimePicker({ initialTime, setEndTime, showTimePicker, setShowTimePicker,endTime }) {
+export default function TimePicker({ initialTime, setEndTime, showTimePicker, setShowTimePicker, endTime }) {
     const minDateTime = new Date();
     const [selectedTime, setSelectedTime] = useState(new Date(initialTime));
 
@@ -13,10 +13,11 @@ export default function TimePicker({ initialTime, setEndTime, showTimePicker, se
     return (
         <div className="flex justify-between">
             <DatePicker
-                selected={new Date(endTime)}
+                selected={selectedTime}
                 onChange={(date) => {
-                    setEndTime(selectedTime); // 선택된 시간을 인풋창에 입력
-                    setShowTimePicker(false); // 시간 선택 창 닫기
+                    setEndTime(date);
+                    setSelectedTime(date); // 선택된 시간을 selectedTime 상태로 업데이트
+                    setShowTimePicker(false);
                 }}
                 minDate={minDateTime}
                 minTime={
@@ -27,16 +28,16 @@ export default function TimePicker({ initialTime, setEndTime, showTimePicker, se
                         minDateTime.getHours(),
                         0, // 분을 0으로 설정합니다.
                         0 // 초를 0으로 설정합니다.
-                      )
+                    )
                 }
                 maxTime={
                     new Date(
-                      minDateTime.getFullYear(),
-                      minDateTime.getMonth(),
-                      minDateTime.getDate(),
-                      23, // 시간을 23으로 설정합니다.
-                      59, // 분을 59으로 설정합니다.
-                      59 // 초를 59으로 설정합니다.
+                        minDateTime.getFullYear(),
+                        minDateTime.getMonth(),
+                        minDateTime.getDate(),
+                        23, // 시간을 23으로 설정합니다.
+                        59, // 분을 59으로 설정합니다.
+                        59 // 초를 59으로 설정합니다.
                     )
                 }
                 showTimeSelect
