@@ -10,13 +10,13 @@ import {
 import { WorkListDataDummy } from "@/data";
 
 export default function TaskList(props) {
-    const { handleCreateTaskClick } = props;
+    const { handleCreateProcessClick } = props;
     const [filterStatus, setFilterStatus] = useState(null);
 
     // const [workList, setWorkList] = useState("");
 
     useEffect(() => {
-        fetch(`http://141.164.51.175:225/api/vm?page=2&size=5 `, {
+        fetch(`http://141.164.51.175:225/api/process?page=1&size=5 `, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json"
@@ -39,6 +39,16 @@ export default function TaskList(props) {
                 <Typography variant="h6" color="white">
                     작업 진행 리스트
                 </Typography>
+                <Button
+                    color="red"
+                    buttonType="link"
+                    size="sm"
+                    rounded={false}
+                    block={false}
+                    onClick={handleCreateProcessClick} // 추가
+                >
+                    작업 생성
+                </Button>
             </CardHeader>
             <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
                 <table className="w-full min-w-[640px] table-auto">

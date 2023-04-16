@@ -1,10 +1,13 @@
 import { useState } from "react";
 import Modal from "react-modal";
-import TaskList from './TaskList'
+
+import ProcessList from './ProcessList';
+import JobConsult from "./JobConsult";
+
 export default function List() {
   const [showModal, setShowModal] = useState(false);
 
-  const handleCreateTaskClick = () => {
+  const handleCreateProcessClick = () => {
     console.log(showModal);
     setShowModal(true);
   };
@@ -15,7 +18,26 @@ export default function List() {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
-      <TaskList/>
+      <ProcessList handleCreateProcessClick={handleCreateProcessClick}  />
+      <Modal
+        isOpen={showModal}
+        onRequestClose={handleModalClose}
+        contentLabel="Job Consult Modal"
+        style={{
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            // maxWidth: "80%", maxHeight: "80%" 
+          },
+        }}
+      >
+        <JobConsult handleModalClose={handleModalClose} />
+        <button onClick={handleModalClose}>Close</button>
+      </Modal>
     </div>
   );
 }

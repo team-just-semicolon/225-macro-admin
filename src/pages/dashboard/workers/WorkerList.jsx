@@ -11,7 +11,6 @@ import Pagination from "./Pagination";
 import { tableDataDummy } from "@/data";
 
 export default function WorkerList(props) {
-    const { handleCreateTaskClick } = props;
     const [workers, setWorkers] = useState();
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(20);
@@ -56,16 +55,6 @@ export default function WorkerList(props) {
                 <Typography variant="h6" color="white">
                     작업 컴퓨터 리스트
                 </Typography>
-                <Button
-                    color="red"
-                    buttonType="link"
-                    size="sm"
-                    rounded={false}
-                    block={false}
-                    onClick={handleCreateTaskClick} // 추가
-                >
-                    작업 생성
-                </Button>
             </CardHeader>
             <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
                 <table className="w-full min-w-[640px] table-auto">
