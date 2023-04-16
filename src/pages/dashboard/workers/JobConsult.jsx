@@ -8,7 +8,6 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { Input } from "@material-tailwind/react";
-import moment from 'moment-timezone';
 
 
 
@@ -20,7 +19,7 @@ export function JobConsult(props) {
   const [operationInterval, setOperationInterval] = useState();
   const [clientOperationCount, setClientOperationCount] = useState("");
 
-  const [endTime, setEndTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(null);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const [img, setImg] = useState();
@@ -175,7 +174,7 @@ export function JobConsult(props) {
               <div className="flex-grow">
                 {showTimePicker ? (
                   <TimePicker
-                    initialTime={new Date()} endTime={endTime} setEndTime={setEndTime} showTimePicker={showTimePicker} setShowTimePicker={setShowTimePicker}
+                    endTime={endTime} setEndTime={setEndTime} showTimePicker={showTimePicker} setShowTimePicker={setShowTimePicker}
                   />
                 ) : (
                   <Input

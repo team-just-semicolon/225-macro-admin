@@ -2,50 +2,52 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function TimePicker({ initialTime, setEndTime, showTimePicker, setShowTimePicker, endTime }) {
-    const minDateTime = new Date();
-    const [selectedTime, setSelectedTime] = useState(new Date(initialTime));
+const TimePicker = ({ initialTime, endTime, setEndTime, showTimePicker, setShowTimePicker }) => {
+    const [selectedDateTime, setSelectedDateTime] = useState(endTime || new Date());
+    const currentTime = new Date();
+    const [minTime, setMinTime] = useState(new Date(currentTime.getTime() + 60 * 1000)); 
+    const [maxTime, setMaxTime] = useState(new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), 23, 59, 59)); 
 
-    function formatTime(date) {
-        return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
-    }
+    const handleDateChange = (date) => {
+        setEndTime(date);
+
+        if (date && date.getHours() !== selectedDateTime.getHours() || date.getMinutes() !== selectedDateTime.getMinutes()) {
+            setShowTimePicker(false);
+        }
+        else {
+            const newSelectedDateTime = new Date(selectedDateTime.getTime());
+            newSelectedDateTime.setFullYear(date.getFullYear());
+            newSelectedDateTime.setMonth(date.getMonth());
+            newSelectedDateTime.setDate(date.getDate());
+            setSelectedDateTime(newSelectedDateTime);
+
+            // 오늘 날짜인 경우 mintime 초기값을 현재 시간 이후로 설정
+            if (date.toDateString() === new Date().toDateString()) {
+                setMinTime(new Date(currentTime.getTime() + 60000)); 
+            } else {
+                setMinTime(new Date(0, 0, 0, 0, 0, 0)); 
+            }
+        }
+    };
 
     return (
         <div className="flex justify-between">
             <DatePicker
-                selected={selectedTime}
-                onChange={(date) => {
-                    setEndTime(date);
-                    setSelectedTime(date); // 선택된 시간을 selectedTime 상태로 업데이트
-                    setShowTimePicker(false);
-                }}
-                minDate={minDateTime}
-                minTime={
-                    new Date(
-                        minDateTime.getFullYear(),
-                        minDateTime.getMonth(),
-                        minDateTime.getDate(),
-                        minDateTime.getHours(),
-                        0, // 분을 0으로 설정합니다.
-                        0 // 초를 0으로 설정합니다.
-                    )
-                }
-                maxTime={
-                    new Date(
-                        minDateTime.getFullYear(),
-                        minDateTime.getMonth(),
-                        minDateTime.getDate(),
-                        23, // 시간을 23으로 설정합니다.
-                        59, // 분을 59으로 설정합니다.
-                        59 // 초를 59으로 설정합니다.
-                    )
-                }
+                selected={selectedDateTime}
+                onChange={handleDateChange}
+                minDate={new Date()}
+                minTime={minTime}
+                maxTime={maxTime}
                 showTimeSelect
                 dateFormat="yyyy/MM/dd hh:mm aa"
                 withPortal={true}
                 inline={true}
-                className={`text-sm border border-gray-400 rounded-md px-2 py-1 ${showTimePicker ? "absolute top-12 bg-white z-50 h-full" : ""}`}
+                className={`text-sm border border-gray-400 rounded-md px-2 py-1 ${showTimePicker ? "absolute top-12 bg-white z-50 h-full" : ""
+                    }`}
             />
+
         </div>
     );
-}
+};
+
+export default TimePicker;
