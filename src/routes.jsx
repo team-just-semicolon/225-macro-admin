@@ -16,15 +16,24 @@ export const routes = [
 
       {
         icon: <ComputerDesktopIcon {...icon} />,
+        sideShow: true,
         name: "Workers",
         path: "/workers",
         element: <Workers />,
       },
       {
         icon: <ComputerDesktopIcon {...icon} />,
+        sideShow: true,
         name: "Process List",
         path: "/processes",
         element: <Processes />,
+      },
+      {
+        icon: <ComputerDesktopIcon {...icon} />,
+        sideShow: false,
+        name: "Process List",
+        path: "/processes/:id",
+        element: <>1</>,
       },
     ],
   },
