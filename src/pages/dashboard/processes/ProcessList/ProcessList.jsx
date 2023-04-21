@@ -7,30 +7,33 @@ import {
     Chip,
     Button
 } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
+
 import { WorkListDataDummy } from "@/data";
 
 export default function TaskList(props) {
     const { handleCreateProcessClick } = props;
     const [filterStatus, setFilterStatus] = useState(null);
-
+    const [processList, setProcessList] = useState([]);
+    const navigate = useNavigate()
     // const [workList, setWorkList] = useState("");
 
     useEffect(() => {
-        fetch(`http://141.164.51.175:225/api/process?page=1&size=5 `, {
+        fetch(`http://141.164.51.175:225/api/process?page=1&size=20 `, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json"
             },
         })
             .then((response) => response.json())
-            .then((data) => console.log(data.data.content))
+            .then((data) => setProcessList(data.data.content))
             // .then((data) => setWorkList(data.data.content))
             .catch((error) => console.error("Error fetching client count:", error));
     }, []);
 
-    useEffect(() => {
-        console.log(WorkListDataDummy);
-    }, []);
+    // useEffect(() => {
+    //     console.log(WorkListDataDummy);
+    // }, []);
 
 
     return (
@@ -41,10 +44,10 @@ export default function TaskList(props) {
                 </Typography>
                 <Button
                     color="red"
-                    buttonType="link"
+                    // buttonType="link"
                     size="sm"
-                    rounded={false}
-                    block={false}
+
+
                     onClick={handleCreateProcessClick} // 추가
                 >
                     작업 생성
@@ -54,7 +57,14 @@ export default function TaskList(props) {
                 <table className="w-full min-w-[640px] table-auto">
                     <thead>
                         <tr>
-                            {["구분", "연결 클라이언트 수", "검색 키워드", "방송 제목", "시작", "종료", "상태", "변경"].map((el) => (
+                            {["id",
+                                // "연결 클라이언트 수", 
+                                "찾는 키워드",
+                                // "방송 제목",
+                                "시작", "종료",
+                                "상태",
+                                //  , "변경"
+                            ].map((el) => (
                                 <th
                                     key={el}
                                     className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -63,14 +73,73 @@ export default function TaskList(props) {
                                         variant="small"
                                         className="text-[11px] font-bold uppercase text-blue-gray-400"
                                     >
-                                        {el}
+                                        {el ?? ''}
                                     </Typography>
                                 </th>
                             ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {WorkListDataDummy && WorkListDataDummy.map(
+                        {
+                            processList && processList.map(({ createdAt, endDate, recordId, status, title }) =>
+                                <tr key={`${recordId}`}
+                                    className="cursor-pointer hover:bg-gray-300"
+                                    onClick={() => navigate(`${recordId}`)}
+                                >
+                                    <td className="py-3 px-5">
+                                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                                            {recordId ?? ''}
+                                        </Typography>
+                                    </td>
+                                    <td className="py-3 px-5">
+                                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                                            {title ?? ''}
+                                        </Typography>
+                                    </td>
+                                    {/* <td className="py-3 px-5">
+                                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                                            {searchKeyword ?? ''}
+                                        </Typography>
+                                    </td> */}
+                                    {/* <td className="py-3 px-5">
+                                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                                            {BroadcastTitle ?? ''}
+                                        </Typography>
+                                    </td> */}
+                                    <td className="py-3 px-5">
+                                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                                            {createdAt ?? ''}
+                                        </Typography>
+                                    </td>
+                                    <td className="py-3 px-5">
+                                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                                            {endDate ?? ''}
+                                        </Typography>
+                                    </td>
+                                    <td className="py-3 px-5">
+                                        <Chip
+                                            variant="gradient"
+                                            color={status === 'RUNNING' ? "blue" : "gray"}
+                                            value={status}
+                                            className="py-0.5 px-2 text-[11px] font-medium"
+                                        />
+                                    </td>
+                                    {status === 'RUNNING' && // "doing" 상태일 때만 버튼을 표시
+                                        <td className="py-3 px-5">
+
+                                            <Button
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" // 버튼 스타일링 추가
+                                                style={{ height: "24px", minWidth: "60px" }} // 버튼 크기 조절
+                                                disabled={status !== "doing"} // 버튼의 활성화 여부 조건 추가
+                                            >
+                                                작업 종료
+                                            </Button>
+                                        </td>
+                                    }
+                                </tr>
+                            )
+                        }
+                        {/* {WorkListDataDummy && WorkListDataDummy.map(
                             ({ identifier, recordId, clientCnt, searchKeyword, BroadcastTitle, createdAt, endAt, status }, key) => {
                                 const className = `py-3 px-5 ${key === WorkListDataDummy.length - 1
                                     ? ""
@@ -81,32 +150,32 @@ export default function TaskList(props) {
                                     <tr key={`${recordId}`} className="cursor-pointer hover:bg-gray-300">
                                         <td className={className}>
                                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {identifier}
+                                                {identifier ?? ''}
                                             </Typography>
                                         </td>
                                         <td className={className}>
                                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {clientCnt}
+                                                {clientCnt ?? ''}
                                             </Typography>
                                         </td>
                                         <td className={className}>
                                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {searchKeyword}
+                                                {searchKeyword ?? ''}
                                             </Typography>
                                         </td>
                                         <td className={className}>
                                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {BroadcastTitle}
+                                                {BroadcastTitle ?? ''}
                                             </Typography>
                                         </td>
                                         <td className={className}>
                                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {createdAt}
+                                                {createdAt ?? ''}
                                             </Typography>
                                         </td>
                                         <td className={className}>
                                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {endAt}
+                                                {endAt ?? ''}
                                             </Typography>
                                         </td>
                                         <td className={className}>
@@ -132,7 +201,7 @@ export default function TaskList(props) {
                                     </tr>
                                 );
                             }
-                        )}
+                        )} */}
                     </tbody>
                 </table>
             </CardBody>

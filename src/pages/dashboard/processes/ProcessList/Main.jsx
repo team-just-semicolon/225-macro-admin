@@ -8,7 +8,7 @@ export default function List() {
   const [showModal, setShowModal] = useState(false);
 
   const handleCreateProcessClick = () => {
-    console.log(showModal);
+    // console.log(showModal);
     setShowModal(true);
   };
 
@@ -18,7 +18,7 @@ export default function List() {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
-      <ProcessList handleCreateProcessClick={handleCreateProcessClick}  />
+      <ProcessList handleCreateProcessClick={handleCreateProcessClick} />
       <Modal
         isOpen={showModal}
         onRequestClose={handleModalClose}
@@ -26,12 +26,12 @@ export default function List() {
         style={{
           content: {
             top: "50%",
-            left: "50%",
+            left: "60%",
             right: "auto",
             bottom: "auto",
             marginRight: "-50%",
             transform: "translate(-50%, -50%)",
-            // maxWidth: "80%", maxHeight: "80%" 
+            // maxWidth: "60%"
           },
         }}
       >

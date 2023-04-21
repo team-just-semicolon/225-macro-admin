@@ -99,7 +99,7 @@ export function JobConsult(props) {
 
   useEffect(() => {
     async function fetchIdleClientCount() {
-      console.log('hi')
+      // console.log('hi')
       const count = await getIdleClientCount();
       setIdleClientCount(count);
     }

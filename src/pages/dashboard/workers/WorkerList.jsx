@@ -17,31 +17,31 @@ export default function WorkerList(props) {
 
     const getWorkers = async (page, size) => {
         try {
-          const response = await fetch(`http://141.164.51.175:225/api/vm?page=${page}&size=${size}&direction=ASC`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-          const data = await response.json();
-          return data.data.content;
+            const response = await fetch(`http://141.164.51.175:225/api/vm?page=${page}&size=${size}&direction=ASC`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            return data.data.content;
         } catch (error) {
-          console.error('Error fetching workers:', error);
-          return [];
+            console.error('Error fetching workers:', error);
+            return [];
         }
-      }
+    }
 
 
     useEffect(() => {
         async function fetchWorkers() {
-          const workers = await getWorkers(page, size);
-          const workersWithIndex = workers.map((worker, index) => {
-            return { ...worker, index: index + 1 };
-          });
-          setWorkers(workersWithIndex);
+            const workers = await getWorkers(page, size);
+            const workersWithIndex = workers.map((worker, index) => {
+                return { ...worker, index: index + 1 };
+            });
+            setWorkers(workersWithIndex);
         }
         fetchWorkers();
-      }, [page, size]);
+    }, [page, size]);
 
 
     // useEffect(() => {
@@ -119,10 +119,10 @@ export default function WorkerList(props) {
                     </tbody>
                 </table>
                 <Pagination
-                        workers={workers}
-                        page={page}
-                        setPage={setPage}
-                    />
+                    workers={workers}
+                    page={page}
+                    setPage={setPage}
+                />
             </CardBody>
         </Card>
     )
