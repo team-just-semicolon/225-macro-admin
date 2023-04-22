@@ -14,6 +14,7 @@ import { Input } from "@material-tailwind/react";
 export function JobConsult(props) {
   const { handleModalClose } = props;
   const [idleClientCount, setIdleClientCount] = useState(0);
+  const [prePageDown, setPrePageDown] = useState(0);
   const [keyword, setKeyword] = useState("");
   const [title, setTitle] = useState("");
   const [operationInterval, setOperationInterval] = useState();
@@ -65,13 +66,15 @@ export function JobConsult(props) {
     console.log("clientOperationCount:", clientOperationCount);
     console.log("endTime:", endTime);
     console.log("endTime:", formattedDate)
+    console.log("prePageDown:", prePageDown)
 
 
     const body = {
       keyword: keyword,
       title: title,
       interval: parseInt(operationInterval),
-      endDate: formattedDate
+      endDate: formattedDate,
+      prePageDown: prePageDown,
     }
     fetch(`http://141.164.51.175:225/api/command/${clientOperationCount}`, {
       method: "POST",
@@ -81,12 +84,12 @@ export function JobConsult(props) {
       },
     })
       .then((response) => {
-        console.log("img uploaded successfully!");
+        console.log(response);
         inputClear();
         handleModalClose();
       })
       .catch((error) => {
-        console.error("Error uploading img:", error);
+        console.error(error);
       });
   }
 
@@ -95,6 +98,7 @@ export function JobConsult(props) {
     setTitle("");
     setOperationInterval("");
     setClientOperationCount("");
+    setPrePageDown(0)
   }
 
   useEffect(() => {
@@ -126,7 +130,7 @@ export function JobConsult(props) {
             <Card key={'1'} color="transparent" shadow={false} className="flex-grow">
               <CardBody className="p-4">
                 <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-                  키워드
+                  검색 키워드
                 </Typography>
                 <Typography variant="small" className="text-blue-gray-500">
                   영상을 찾기 위해 검색할 키워드를 입력해주세요. 해당 키워드로 유투브에서 영상 리스트를 조회 합니다.
@@ -139,10 +143,10 @@ export function JobConsult(props) {
             <Card key={'2'} color="transparent" shadow={false} className="flex-grow">
               <CardBody className="p-4">
                 <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-                  영상 제목
+                  찾을 문자열
                 </Typography>
                 <Typography variant="small" className="text-blue-gray-500">
-                  영상을 찾기 위해 영상의 제목을 입력해주세요. 해당 키워드로 유투브에서 방송중인 영상을 찾습니다.
+                  찾아야할 문자열을 입력해주세요. 영문으로 입력해야합니다.
                 </Typography>
               </CardBody>
               <div className="flex-grow">
@@ -208,6 +212,19 @@ export function JobConsult(props) {
               </CardBody>
               <div className="flex-grow">
                 <Input required size="md" label="클라이언트 수" className="h-full w-full" value={clientOperationCount} onChange={(e) => setClientOperationCount(e.target.value)} />
+              </div>
+            </Card>
+            <Card key={'5'} color="transparent" shadow={false} style={{ flexGrow: 1 }}>
+              <CardBody className="p-4">
+                <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
+                  프리페이지다운
+                </Typography>
+                <Typography variant="small" className="font-normal text-blue-gray-500">
+                  문자열을 찾기 전에 미리 몇 번 PageDown 해야하는지 입력해주세요. 실제 vm에서 테스트해본 후 입력해주세요
+                </Typography>
+              </CardBody>
+              <div className="flex-grow">
+                <Input required size="md" label="프리페이지다운" className="h-full w-full" value={prePageDown} onChange={(e) => setPrePageDown(e.target.value)} />
               </div>
             </Card>
             {/* 이미지 업로드 */}
