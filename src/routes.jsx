@@ -4,6 +4,7 @@ import {
 
 import Workers from "@/pages/dashboard/workers/Main";
 import Processes from "@/pages/dashboard/processes/ProcessList/Main";
+import ProcessDetail from "@/pages/dashboard/processes/Detail";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -33,7 +34,7 @@ export const routes = [
         sideShow: false,
         name: "Process List",
         path: "/processes/:id",
-        element: <>1</>,
+        element: <ProcessDetail />,
       },
     ],
   },
