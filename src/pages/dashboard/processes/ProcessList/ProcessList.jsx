@@ -19,7 +19,7 @@ export default function TaskList(props) {
     // const [workList, setWorkList] = useState("");
 
     useEffect(() => {
-        fetch(`http://141.164.51.175:225/api/process?page=1&size=20 `, {
+        fetch(`http://141.164.51.175:225/api/process?page=1&size=20`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json"
