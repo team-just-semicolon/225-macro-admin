@@ -11,14 +11,23 @@ import {
 import ClientList from '@/components/ClientList';
 export default function Detail() {
   const [clientList, setClientList] = React.useState([])
+  const [detail, setDetail] = React.useState({
+    keyword: '',
+    title: '',
+    createdAt: '',
+    endDate: '',
+    clienstCount: 0,
+
+  })
+
   const location = useLocation()
+  const processId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1)
 
   React.useEffect(() => {
     console.log('client list changed: ', clientList)
   }, [clientList])
 
   React.useEffect(() => {
-    const processId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1)
     const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com'
     console.log(serverUri)
     getDetail(serverUri, processId)
@@ -32,10 +41,18 @@ export default function Detail() {
           "Content-Type": "application/json"
         }
       })
-      console.log('fetch res: ', fetchRes.body.data)
-      if (fetchRes && fetchRes.code === 200) {
-        // setClientList(fetchRes.data.clients.clients)
-        console.log(fetchRes.code)
+      const responseData = await fetchRes.json()
+      console.log('fetch res: ', responseData)
+      if (responseData && responseData.code === 200) {
+        const data = responseData.data
+        setClientList(data.clients.clients)
+        setDetail({
+          keyword: data.keyworkd,
+          title: data.title,
+          createdAt: data.createdAt,
+          endDate: data.endDate,
+          clientsCount: data.clients.clientsCount,
+        })
       }
     } catch (e) {
       console.error(e)
@@ -67,7 +84,7 @@ export default function Detail() {
               검색 키워드
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              text
+              {detail.keyword ?? ''}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -75,7 +92,7 @@ export default function Detail() {
               찾는 문자열
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              NAni
+              {detail.title ?? ''}
             </Typography>
           </div>
 
@@ -84,7 +101,7 @@ export default function Detail() {
               시작시간
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              text
+              {detail.createdAt ?? ''}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -92,7 +109,7 @@ export default function Detail() {
               종료시간
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              NAni
+              {detail.endDate ?? ''}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -100,7 +117,7 @@ export default function Detail() {
               클라이언트 수
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              NAni
+              {detail.clienstCount ?? 0}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -108,13 +125,15 @@ export default function Detail() {
               프리페이지 다운
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              NAni
+              {detail.prePagedown ?? 0}
             </Typography>
           </div>
         </div>
         <div className="w-full border p-4 rounded-md">
           <ClientList
             clientList={clientList}
+            setClientList={setClientList}
+            processId={processId}
           />
         </div>
       </CardBody>
