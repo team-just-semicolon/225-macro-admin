@@ -67,14 +67,12 @@ export default function Detail() {
           작업 진행 상세
         </Typography>
         <Button
-          color="red"
+          color="gray"
           // buttonType="link"
           size="sm"
-
-
           onClick={() => { }} // 추가
         >
-          작업 생성
+          작업 중지
         </Button>
       </CardHeader>
       <CardBody className="">
@@ -130,7 +128,7 @@ export default function Detail() {
             </Typography>
           </div>
         </div>
-        <div className="w-full border p-4 rounded-md">
+        <div className="w-full">
           <ClientList
             clientList={clientList}
             setClientList={setClientList}
