@@ -9,6 +9,7 @@ import {
 } from "@material-tailwind/react";
 
 import ClientList from '@/components/ClientList';
+
 export default function Detail() {
   const [clientList, setClientList] = React.useState([])
   const [detail, setDetail] = React.useState({
@@ -45,7 +46,7 @@ export default function Detail() {
       console.log('fetch res: ', responseData)
       if (responseData && responseData.code === 200) {
         const data = responseData.data
-        setClientList(data.clients.clients)
+        setClientList(data.clients?.clients)
         setDetail({
           keyword: data.keyworkd,
           title: data.title,
