@@ -3,36 +3,9 @@ import { Chip, Button, Tooltip, Typography } from '@material-tailwind/react'
 import {
   ArrowPathIcon
 } from "@heroicons/react/24/solid";
-const CONST_CLIENTS = [
-  {
-    id: 1,
-    status: 'RUNNING',
-  },
-  {
-    id: 2,
-    status: 'IDLE',
-  },
-  {
-    id: 3,
-    status: 'WATCHING',
-  },
-  {
-    id: 4,
-    status: 'TIMEOUT',
-  },
-  {
-    id: 5,
-    status: 'TIMEOUT',
-  },
-  {
-    id: 6,
-    status: 'ERROR',
-  },
-]
 
-const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
 
-export default function ClientList({ process = CONST_CLIENTS, setProcess, processId, getDetail }) {
+export default function ClientList({ process, setProcess, processId, getDetail }) {
   const [refreshCount, setRefreshCount] = useState(10)
 
 
