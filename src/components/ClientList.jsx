@@ -59,7 +59,7 @@ export default function ClientList({ clientList = CONST_CLIENTS, setClientList, 
       })
       const responseData = await fetchRes.json()
       if (responseData && responseData.code === 200) {
-        setClientList(responseData.data.clients.clients)
+        setClientList(responseData.data.clients)
       }
       setRefreshCount(10)
 

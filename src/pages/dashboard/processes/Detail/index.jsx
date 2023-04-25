@@ -46,13 +46,13 @@ export default function Detail() {
       console.log('fetch res: ', responseData)
       if (responseData && responseData.code === 200) {
         const data = responseData.data
-        setClientList(data.clients?.clients)
+        setClientList(data.clients)
         setDetail({
-          keyword: data.keyworkd,
-          title: data.title,
-          createdAt: data.createdAt,
-          endDate: data.endDate,
-          clientsCount: data.clients.clientsCount,
+          keyword: data.clients?.child?.keyworkd,
+          title: data.clients?.child?.title,
+          createdAt: data.clients?.child?.createdAt,
+          endDate: data.clients?.child?.endDate,
+          clientsCount: data.clients?.child?.clients.clientsCount,
         })
       }
     } catch (e) {
