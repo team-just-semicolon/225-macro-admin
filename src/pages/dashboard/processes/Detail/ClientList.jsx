@@ -36,23 +36,28 @@ export default function ClientList({ process = CONST_CLIENTS, setProcess, proces
   const [refreshCount, setRefreshCount] = useState(10)
 
 
-
   useEffect(() => {
     const reduceCount = setInterval(() => {
-      setRefreshCount((prev) => prev - 1)
+      setRefreshCount((prev) => prev - 1 >= 0 ? prev - 1 : 0);
     }, 1000)
-    if (refreshCount < 0) {
-      getDetail(processId);
-    }
+
     return () => {
       clearInterval(reduceCount)
     }
-  }, [refreshCount])
+  }, [])
+
+
+  useEffect(() => {
+    if (refreshCount === 0) {
+      getDetail(processId);
+      setRefreshCount(10)
+    }
+  }, [refreshCount, getDetail, processId])
 
   const handleChipClick = useCallback(() =>{
     getDetail(processId);
     setRefreshCount(10);
-  },[serverUri])
+  }, []);
 
   return (
     <div>

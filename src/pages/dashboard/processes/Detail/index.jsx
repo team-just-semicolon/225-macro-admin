@@ -44,7 +44,6 @@ export default function Detail() {
         }
       })
       const responseData = await fetchRes.json()
-      console.log('fetch res: ', responseData)
       if (responseData && responseData.code === 200) {
         const data = responseData.data
         setProcess(data);
