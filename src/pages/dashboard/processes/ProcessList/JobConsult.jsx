@@ -57,17 +57,6 @@ export function JobConsult(props) {
           .getSeconds()
           .toString()
           .padStart(2, "0")}`;
-    console.log();
-
-
-    console.log("keyword:", keyword);
-    console.log("title:", title);
-    console.log("interval:", operationInterval);
-    console.log("clientOperationCount:", clientOperationCount);
-    console.log("endTime:", endTime);
-    console.log("endTime:", formattedDate)
-    console.log("prePageDown:", prePageDown)
-
 
     const body = {
       keyword: keyword,
@@ -103,7 +92,6 @@ export function JobConsult(props) {
 
   useEffect(() => {
     async function fetchIdleClientCount() {
-      // console.log('hi')
       const count = await getIdleClientCount();
       setIdleClientCount(count);
     }
