@@ -8,11 +8,11 @@ import {
   Button
 } from "@material-tailwind/react";
 
-import ClientList from '@/components/ClientList';
+import ClientList from '@/pages/dashboard/processes/Detail/ClientList';
 
 export default function Detail() {
-  const [clientList, setClientList] = React.useState([])
-  const [detail, setDetail] = React.useState({
+  const [process, setProcess] = React.useState([])
+  const [processDetail, setProcessDetail] = React.useState({
     keyword: '',
     title: '',
     createdAt: '',
@@ -25,8 +25,8 @@ export default function Detail() {
   const processId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1)
 
   React.useEffect(() => {
-    console.log('client list changed: ', clientList)
-  }, [clientList])
+    console.log('client list changed: ', process)
+  }, [process])
 
   React.useEffect(() => {
     const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com'
@@ -46,13 +46,13 @@ export default function Detail() {
       console.log('fetch res: ', responseData)
       if (responseData && responseData.code === 200) {
         const data = responseData.data
-        setClientList(data.clients)
-        setDetail({
+        setProcess(data);
+        setProcessDetail({
           keyword: data.clients?.child?.keyworkd,
           title: data.clients?.child?.title,
           createdAt: data.clients?.child?.createdAt,
           endDate: data.clients?.child?.endDate,
-          clientsCount: data.clients?.child?.clients.clientsCount,
+          clientsCount: data.clients?.clientsCount,
         })
       }
     } catch (e) {
@@ -83,7 +83,7 @@ export default function Detail() {
               검색 키워드
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              {detail.keyword ?? ''}
+              {process.keyword ?? ''}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -91,7 +91,7 @@ export default function Detail() {
               찾는 문자열
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              {detail.title ?? ''}
+              {process.title ?? ''}
             </Typography>
           </div>
 
@@ -100,7 +100,7 @@ export default function Detail() {
               시작시간
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              {detail.createdAt ?? ''}
+              {process.createdAt ?? ''}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -108,7 +108,7 @@ export default function Detail() {
               종료시간
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              {detail.endDate ?? ''}
+              {process.endDate ?? ''}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -116,7 +116,7 @@ export default function Detail() {
               클라이언트 수
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              {detail.clienstCount ?? 0}
+              {process.clienstCount ?? 0}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -124,14 +124,14 @@ export default function Detail() {
               프리페이지 다운
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              {detail.prePagedown ?? 0}
+              {process.prePagedown ?? 0}
             </Typography>
           </div>
         </div>
         <div className="w-full">
           <ClientList
-            clientList={clientList}
-            setClientList={setClientList}
+            process={process}
+            setProcess={setProcess}
             processId={processId}
           />
         </div>

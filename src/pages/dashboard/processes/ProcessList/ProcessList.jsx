@@ -26,7 +26,10 @@ export default function TaskList(props) {
             },
         })
             .then((response) => response.json())
-            .then((data) => setProcessList(data.data.content))
+            .then((data) => {
+                console.log(data)
+                setProcessList(data.data.content)
+            })
             // .then((data) => setWorkList(data.data.content))
             .catch((error) => console.error("Error fetching client count:", error));
     }, []);

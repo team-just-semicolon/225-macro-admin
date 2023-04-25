@@ -30,7 +30,7 @@ const CONST_CLIENTS = [
   },
 ]
 
-export default function ClientList({ clientList = CONST_CLIENTS, setClientList, processId }) {
+export default function ClientList({ process = CONST_CLIENTS, setProcess, processId }) {
   const [refreshCount, setRefreshCount] = useState(10)
   const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com'
 
@@ -59,7 +59,7 @@ export default function ClientList({ clientList = CONST_CLIENTS, setClientList, 
       })
       const responseData = await fetchRes.json()
       if (responseData && responseData.code === 200) {
-        setClientList(responseData.data.clients)
+        setProcess(responseData.data)
       }
       setRefreshCount(10)
 
@@ -97,7 +97,7 @@ export default function ClientList({ clientList = CONST_CLIENTS, setClientList, 
         <div className="flex-1">
           <div className="flex gap-4 items-center ">
             <Typography variant="h6" className="flex gap-4 items-center">
-              {`클라이언트 : ${clientList.length} 개`}
+              {`클라이언트 : ${process.clients?.clientsCount} 개`}
             </Typography>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function ClientList({ clientList = CONST_CLIENTS, setClientList, 
         <div className="flex-1">
           <div className="flex gap-4 items-center ">
             <Typography variant="h6" className="flex gap-4 items-center">
-              {`커맨드 : ${clientList.length} 개`}
+              {`커맨드 : ${process.clients?.clientsCount} 개`}
             </Typography>
           </div>
         </div>
