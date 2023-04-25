@@ -10,6 +10,8 @@ import {
 
 import ClientList from '@/pages/dashboard/processes/Detail/ClientList';
 
+const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+
 export default function Detail() {
   const [process, setProcess] = React.useState([])
   const [processDetail, setProcessDetail] = React.useState({
@@ -29,13 +31,12 @@ export default function Detail() {
   }, [process])
 
   React.useEffect(() => {
-    const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com'
-    console.log(serverUri)
-    getDetail(serverUri, processId)
+    getDetail(processId);
   }, [])
 
-  const getDetail = async (serverUri, processId) => {
+  const getDetail = async (processId) => {
     try {
+      console.log(`${serverUri}/api/process/${processId}`);
       const fetchRes = await fetch(`${serverUri}/api/process/${processId}`, {
         method: 'GET',
         headers: {
@@ -116,7 +117,7 @@ export default function Detail() {
               클라이언트 수
             </Typography>
             <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
-              {process.clienstCount ?? 0}
+              {process?.clients?.clientsCount ?? 0}
             </Typography>
           </div>
           <div className="basis-1/2 mb-4">
@@ -133,6 +134,8 @@ export default function Detail() {
             process={process}
             setProcess={setProcess}
             processId={processId}
+            getDetail={getDetail}
+            processDetail={processDetail}
           />
         </div>
       </CardBody>

@@ -17,7 +17,7 @@ export default function WorkerList(props) {
 
     const getWorkers = async (page, size) => {
         try {
-            const response = await fetch(`http://141.164.51.175:225/api/vm?page=${page}&size=${size}&direction=ASC`, {
+            const response = await fetch(`http://141.164.51.175:225/api/client?page=${page}&size=${size}&direction=ASC`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
