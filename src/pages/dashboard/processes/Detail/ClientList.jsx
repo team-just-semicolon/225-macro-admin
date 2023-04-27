@@ -4,22 +4,34 @@ import {
   ArrowPathIcon
 } from "@heroicons/react/24/solid";
 
-const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+// const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+const serverUri = 'http://141.164.51.175:225'
 
 
 export default function ClientList({ process, setProcess, processId, getDetail }) {
   const [refreshCount, setRefreshCount] = useState(10)
-  const [currentStatus, setCurrentStatus] = useState(null);
-  const [isShowClientList, setIsShowClientList] = useState(false);
+  const [toggleFilter, setToggleFilter] = useState({
+    IDLE: true,
+    RUNNING: true,
+    WATCHING: true,
+    TIMEOUT: true,
+    FAIL: true,
+    ERROR: true
+  })
 
   const handleClientIdClick = (status) => {
-    if(status === currentStatus) {
-      setIsShowClientList(false);
-      setCurrentStatus(null);
-      return
-    }
-    setCurrentStatus(status);
-    setIsShowClientList(true);
+
+    setToggleFilter(prev => ({
+      ...prev,
+      [status]: !prev[status]
+    }))
+    // if (status === currentStatus) {
+    //   setIsShowClientList(false);
+    //   setCurrentStatus(null);
+    //   return
+    // }
+    // setCurrentStatus(status);
+    // setIsShowClientList(true);
   };
 
   const getStatusCount = (status) => {
@@ -89,78 +101,119 @@ export default function ClientList({ process, setProcess, processId, getDetail }
 
 
   useEffect(() => {
+    console.log(process.clients?.child)
+  }, [process])
+  useEffect(() => {
     if (refreshCount === 0) {
       getDetail(processId);
       setRefreshCount(10)
     }
   }, [refreshCount, getDetail, processId])
 
+  const getChipColor = (status) => {
+    switch (status) {
+      case 'IDLE':
+        return 'cyan'
+      case 'RUNNING':
+        return 'blue'
+      case 'WATCHING':
+        return 'green'
+      case 'TIMEOUT':
+        return 'yellow'
+      case 'FAIL':
+        return 'gray'
+      case 'ERROR':
+        return 'red'
+      default:
+        return 'error'
+    }
+  }
 
   return (
     <div>
-      <div className="flex gap-3  border p-4 rounded-md">
-        <div className="flex-1">
-          <Typography variant="small" className="font-normal text-blue-gray-500 mb-4">
-            클라이언트 상태
-          </Typography>
-          <div className="flex gap-4 items-center">
-            <Chip
-              color={getStatusCount('IDLE') === 0 ? 'gray' : 'cyan'}
-              value={`대기중 ${getStatusCount('IDLE')} 명`}
-              onClick={() => handleClientIdClick('IDLE')}
-            />
-            <Chip
-              color={getStatusCount('RUNNING') === 0 ? 'gray' : 'blue'}
-              value={`동작중 ${getStatusCount('RUNNING')} 명`}
-              onClick={() => handleClientIdClick('RUNNING')}
-            />
-            <Chip
-              color={getStatusCount('WATCHING') === 0 ? 'gray' : 'green'}
-              value={`시청중 ${getStatusCount('WATCHING')}명`}
-              onClick={() => handleClientIdClick('IDLE')}
-            />
-            <Chip
-              color={getStatusCount('ERROR') === 0 ? 'gray' : 'yellow'}
-              value={`연결에러 ${getStatusCount('ERROR')} 명`}
-              onClick={() => handleClientIdClick('IDLE')}
-            />
-            <Chip
-              color={getStatusCount('TIMEOUT') === 0 ? 'gray' : 'gray'}
-              value={`재실행대기 ${getStatusCount('TIMEOUT')} 명`}
-              onClick={() => handleClientIdClick('IDLE')}
-            />
-            <Chip
-              color={getStatusCount('FAIL') === 0 ? 'gray' : 'red'}
-              value={`찾기실패 ${getStatusCount('FAIL')} 명`}
-              onClick={() => handleClientIdClick('IDLE')}
-            />
+      <div className='border p-2 rounded-lg'>
+        <div className="flex gap-3 p-4">
+          <div className="flex-1">
+            <Typography variant="small" className="font-normal text-blue-gray-500 mb-4">
+              클라이언트 상태
+            </Typography>
+
+          </div>
+          <div className="flex-1 flex">
+            <div className='flex flex-1 gap-2 justify-end items-center'>
+              <Tooltip content="클릭 시 클라이언트들의 상태를 즉시 새로고침 합니다.">
+                <Button color='indigo' onClick={handleRefreshClick} className="flex items-center whitespace-nowrap">
+                  <ArrowPathIcon className="w-5 h-5 text-inherit" />
+                  <span>{`${refreshCount} 초 전`}</span>
+                </Button>
+              </Tooltip>
+              <Tooltip content="문자열 찾기에 실패한 모든 클라이언트에게 수동 재실행 명령을 보내줍니다.">
+                <Button color='teal' onClick={handleFailRestart} className="whitespace-nowrap" disabled>수동 재실행 </Button>
+              </Tooltip>
+            </div>
           </div>
         </div>
-        <div className="flex-1">
-          <div className='flex flex-1 gap-2 justify-end'>
-            <Tooltip content="클릭 시 클라이언트들의 상태를 즉시 새로고침 합니다.">
-              <Button color='indigo' onClick={handleRefreshClick} className="flex items-center">
-                <ArrowPathIcon className="w-5 h-5 text-inherit" />
-                <span>{`${refreshCount} 초 전`}</span>
-              </Button>
-            </Tooltip>
-            <Tooltip content="문자열 찾기에 실패한 모든 클라이언트에게 수동 재실행 명령을 보내줍니다.">
-              <Button color='teal' onClick={handleFailRestart} disabled>수동 재실행 </Button>
-            </Tooltip>
-          </div>
+        <div className="flex gap-4 items-center flex-wrap">
+          <Chip
+            className={`${toggleFilter.IDLE ? 'border-2 border-indigo-500/100' : ''}`}
+            color={'cyan'}
+            value={`대기중 ${getStatusCount('IDLE')}`}
+            onClick={() => handleClientIdClick('IDLE')}
+          />
+          <Chip
+            className={`${toggleFilter.RUNNING ? 'border-2 border-indigo-500/100' : ''}`}
+            color={'blue'}
+            value={`동작중 ${getStatusCount('RUNNING')}`}
+            onClick={() => handleClientIdClick('RUNNING')}
+          />
+          <Chip
+            className={`${toggleFilter.WATCHING ? 'border-2 border-indigo-500/100' : ''}`}
+            color={'green'}
+            value={`시청중 ${getStatusCount('WATCHING')}`}
+            onClick={() => handleClientIdClick('WATCHING')}
+          />
+          <Chip
+            className={`${toggleFilter.ERROR ? 'border-2 border-indigo-500/100' : ''}`}
+            color={'red'}
+            value={`연결에러 ${getStatusCount('ERROR')}`}
+            onClick={() => handleClientIdClick('ERROR')}
+          />
+          <Chip
+            className={`${toggleFilter.TIMEOUT ? 'border-2 border-indigo-500/100' : ''}`}
+            color={'gray'}
+            value={`재실행대기 ${getStatusCount('TIMEOUT')}`}
+            onClick={() => handleClientIdClick('TIMEOUT')}
+          />
+          <Chip
+            className={`${toggleFilter.FAIL ? 'border-2 border-indigo-500/100' : ''}`}
+            color={'yellow'}
+            value={`찾기실패 ${getStatusCount('FAIL')}`}
+            onClick={() => handleClientIdClick('FAIL')}
+          />
         </div>
       </div>
-      {isShowClientList && (
-        <div className="flex-1 flex gap-1">
-          {process?.clients?.child?.filter(client => client.status === currentStatus).map(client => (
-            <Chip
-              key={client.clientId}
-              color="cyan"
-              value={client.clientId}
-            />
-          ))}
+      <div className='flex flex-wrap'>
+        <div className="flex flex-1 flex-wrap gap-2">
+
+          {process?.clients?.child?.map(client => {
+            // console.log(toggleFilter[client.status])
+            if (toggleFilter[client.status]) return (
+              <Chip
+                key={client.clientId}
+                color={getChipColor(client.status)}
+                value={client.clientId}
+              />
+            )
+          })}
+          {/* {process?.clients?.child?.filter(client => client.status === currentStatus).map(client => (
+              <Chip
+                key={client.clientId}
+                color="cyan"
+                value={client.clientId}
+              />
+            ))} */}
         </div>
-      )}
+      </div>
     </div>
   )
 }

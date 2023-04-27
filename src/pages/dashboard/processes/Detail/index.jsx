@@ -11,30 +11,23 @@ import {
 
 import ClientList from '@/pages/dashboard/processes/Detail/ClientList';
 
-const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+// const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+const serverUri = 'http://141.164.51.175:225'
 
 export default function Detail() {
   const [process, setProcess] = useState([])
   const [isEditing, setIsEditing] = useState(false);
   const location = useLocation()
   const processId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1)
-  const [processDetail, setProcessDetail] = useState({
-    keyword: '',
-    title: '',
-    createdAt: '',
-    endDate: '',
-    clienstCount: 0,
 
-  })
   const [updateProcessDetail, setUpdateProcessDetail] = useState({
     keyword: '',
     title: '',
     createdAt: '',
     endDate: '',
     clienstCount: 0,
-
+    prePageDown: 0
   })
-
 
 
   const getDetail = async (processId) => {
@@ -48,14 +41,28 @@ export default function Detail() {
       const responseData = await fetchRes.json()
       if (responseData && responseData.code === 200) {
         const data = responseData.data
-        setProcess(data);
-        setProcessDetail({
-          keyword: data.clients?.child?.keyworkd,
-          title: data.clients?.child?.title,
-          createdAt: data.clients?.child?.createdAt,
-          endDate: data.clients?.child?.endDate,
-          clientsCount: data.clients?.clientsCount,
-        })
+        setProcess({
+          ...data,
+          clients: {
+            ...data.clients,
+            child: data.clients.child.sort((a, b) => {
+              const keyA = Number(a.clientId);
+              const keyB = Number(b.clientId);
+
+              if (keyA < keyB) return -1;
+              if (keyA > keyB) return 1;
+              return 0;
+            }).sort((a, b) => {
+              const keyA = a.status;
+              const keyB = b.status;
+
+              if (keyA < keyB) return 1;
+              if (keyA > keyB) return -1;
+              return 0;
+            })
+          }
+        });
+
       }
     } catch (e) {
       console.error(e)
@@ -70,7 +77,7 @@ export default function Detail() {
     const hour = String(currentDate.getHours()).padStart(2, '0');
     const minute = String(currentDate.getMinutes()).padStart(2, '0');
     const second = String(currentDate.getSeconds()).padStart(2, '0');
-    
+
     const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 
     const body = {
@@ -79,9 +86,8 @@ export default function Detail() {
       "title": process.title,
       "method": "findKeyword",
       "endDate": formattedDate,
-      
     }
-    
+
     try {
       const fetchRes = await fetch(`${serverUri}/api/process/${processId}`, {
         method: 'PATCH',
@@ -135,7 +141,7 @@ export default function Detail() {
       <CardBody className="">
         <div className="grid grid-cols-2 gap-2">
           <div className="mb-4 flex flex-row items-center">
-            <Typography variant="small" className="font-normal text-blue-gray-500" style={{ width: '9em' }}>
+            <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>
               검색 키워드
             </Typography>
             <Input
@@ -148,7 +154,7 @@ export default function Detail() {
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
-            <Typography variant="small" className="font-normal text-blue-gray-500" style={{ width: '9em' }}>
+            <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>
               찾는 문자열
             </Typography>
             <Input
@@ -161,7 +167,7 @@ export default function Detail() {
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
-            <Typography variant="small" className="font-normal text-blue-gray-500" style={{ width: '9em' }}>
+            <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>
               시작시간
             </Typography>
             <Input
@@ -174,20 +180,20 @@ export default function Detail() {
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
-            <Typography variant="small" className="font-normal text-blue-gray-500" style={{ width: '9em' }}>
+            <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>
               종료시간
             </Typography>
             <Input
               type="text"
-              value={process?.createndDateedAt}
-              onChange={(e) => setProcess({ ...process, createndDateedAt: e.target.value })}
+              value={process?.endDate}
+              onChange={(e) => setProcess({ ...process, endDate: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
-            <Typography variant="small" className="font-normal text-blue-gray-500" style={{ width: '9em' }}>
+            <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>
               클라이언트 수
             </Typography>
             <Input
@@ -200,13 +206,13 @@ export default function Detail() {
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
-            <Typography variant="small" className="font-normal text-blue-gray-500" style={{ width: '9em' }}>
+            <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>
               프리페이지 다운
             </Typography>
             <Input
               type="text"
-              value={process?.prePagedown}
-              onChange={(e) => setProcess({ ...process, prePagedown: e.target.value })}
+              value={process?.prePageDown}
+              onChange={(e) => setProcess({ ...process, prePageDown: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
@@ -219,7 +225,6 @@ export default function Detail() {
             setProcess={setProcess}
             processId={processId}
             getDetail={getDetail}
-            processDetail={processDetail}
           />
         </div>
       </CardBody>
