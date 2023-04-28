@@ -173,22 +173,22 @@ export default function ClientList({ process, setProcess, processId, getDetail }
             onClick={() => handleClientIdClick('WATCHING')}
           />
           <Chip
-            className={`${toggleFilter.ERROR ? 'border-2 border-indigo-500/100' : ''}`}
-            color={'red'}
-            value={`연결에러 ${getStatusCount('ERROR')}`}
-            onClick={() => handleClientIdClick('ERROR')}
-          />
-          <Chip
             className={`${toggleFilter.TIMEOUT ? 'border-2 border-indigo-500/100' : ''}`}
-            color={'gray'}
-            value={`재실행대기 ${getStatusCount('TIMEOUT')}`}
+            color={'red'}
+            value={`연결에러 ${getStatusCount('TIMEOUT')}`}
             onClick={() => handleClientIdClick('TIMEOUT')}
           />
           <Chip
             className={`${toggleFilter.FAIL ? 'border-2 border-indigo-500/100' : ''}`}
-            color={'yellow'}
-            value={`찾기실패 ${getStatusCount('FAIL')}`}
+            color={'gray'}
+            value={`재실행대기 ${getStatusCount('FAIL')}`}
             onClick={() => handleClientIdClick('FAIL')}
+          />
+          <Chip
+            className={`${toggleFilter.ERROR ? 'border-2 border-indigo-500/100' : ''}`}
+            color={'yellow'}
+            value={`찾기실패 ${getStatusCount('ERROR')}`}
+            onClick={() => handleClientIdClick('ERROR')}
           />
         </div>
       </div>
