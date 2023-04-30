@@ -12,7 +12,7 @@ import { Input } from "@material-tailwind/react";
 
 
 export function JobConsult(props) {
-  const { handleModalClose } = props;
+  const { handleModalClose, getProcessList } = props;
   const [idleClientCount, setIdleClientCount] = useState(0);
   const [prePageDown, setPrePageDown] = useState(0);
   const [keyword, setKeyword] = useState("");
@@ -73,9 +73,9 @@ export function JobConsult(props) {
       },
     })
       .then((response) => {
-        console.log(response);
         inputClear();
         handleModalClose();
+        getProcessList();
       })
       .catch((error) => {
         console.error(error);

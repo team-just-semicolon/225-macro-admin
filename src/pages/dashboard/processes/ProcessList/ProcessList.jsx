@@ -12,32 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { WorkListDataDummy } from "@/data";
 
 export default function TaskList(props) {
-    const { handleCreateProcessClick } = props;
+    const { handleCreateProcessClick , getProcessList, processList} = props;
     const [filterStatus, setFilterStatus] = useState(null);
-    const [processList, setProcessList] = useState([]);
     const navigate = useNavigate()
-    // const [workList, setWorkList] = useState("");
+
 
     useEffect(() => {
-        fetch(`http://141.164.51.175:225/api/process?page=1&size=20`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-                setProcessList(data.data.content)
-            })
-            // .then((data) => setWorkList(data.data.content))
-            .catch((error) => console.error("Error fetching client count:", error));
+        getProcessList();
     }, []);
-
-    // useEffect(() => {
-    //     console.log(WorkListDataDummy);
-    // }, []);
-
 
     return (
         <Card>
