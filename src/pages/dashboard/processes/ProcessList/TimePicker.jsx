@@ -42,6 +42,7 @@ const TimePicker = ({ initialTime, endTime, setEndTime, showTimePicker, setShowT
                 dateFormat="yyyy/MM/dd hh:mm aa"
                 withPortal={true}
                 inline={true}
+                timeIntervals={10}
                 className={`text-sm border border-gray-400 rounded-md px-2 py-1 ${showTimePicker ? "absolute top-12 bg-white z-50 h-full" : ""
                     }`}
             />
