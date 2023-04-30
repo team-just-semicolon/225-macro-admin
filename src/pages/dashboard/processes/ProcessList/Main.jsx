@@ -26,7 +26,7 @@ export default function List() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
+        data.data.content.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setProcessList(data.data.content);
       })
       // .then((data) => setWorkList(data.data.content))
