@@ -8,7 +8,7 @@ import {
     Button
 } from "@material-tailwind/react";
 import Pagination from "./Pagination";
-import { tableDataDummy } from "@/data";
+import { WorkListDataDummy } from "@/data";
 
 export default function WorkerList(props) {
     const [workers, setWorkers] = useState();
@@ -45,7 +45,7 @@ export default function WorkerList(props) {
 
 
     // useEffect(() => {
-    //     setWorkers(tableDataDummy);
+    //     setWorkers(WorkListDataDummy);
     // }, []);
 
 

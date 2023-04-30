@@ -1,8 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { Chip, Button, Tooltip, Typography } from '@material-tailwind/react'
+import { Chip, Button, Tooltip, Typography ,Icon} from '@material-tailwind/react'
 import {
-  ArrowPathIcon
+  ArrowPathIcon,UserCircleIcon
 } from "@heroicons/react/24/solid";
+
+
 
 // const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
 const serverUri = 'http://141.164.51.175:225'
@@ -202,7 +204,8 @@ export default function ClientList({ process, setProcess, processId, getDetail }
                 key={client.clientId}
                 color={getChipColor(client.status)}
                 value={client.clientId}
-              />
+              >
+              </Chip>
             )
           })}
           {/* {process?.clients?.child?.filter(client => client.status === currentStatus).map(client => (

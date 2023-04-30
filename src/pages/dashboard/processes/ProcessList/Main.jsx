@@ -4,10 +4,14 @@ import Modal from "react-modal";
 import ProcessList from './ProcessList';
 import JobConsult from "./JobConsult";
 
+import { ProcessListtDataDummy } from "@/data";
+
+
 export default function List() {
   const [showModal, setShowModal] = useState(false);
   const [processList, setProcessList] = useState([]);
-
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(20);
 
   const handleCreateProcessClick = () => {
     setShowModal(true);
@@ -17,8 +21,8 @@ export default function List() {
     setShowModal(false);
   };
 
-  const getProcessList = () => {
-    fetch(`http://141.164.51.175:225/api/process?page=1&size=20`, {
+  const getProcessList = (page, size) => {
+    fetch(`http://141.164.51.175:225/api/process?page=${page}&size=${size}`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json"
@@ -26,8 +30,10 @@ export default function List() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         data.data.content.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setProcessList(data.data.content);
+        setProcessList(data.data);
+        // setProcessList(ProcessListtDataDummy);
       })
       // .then((data) => setWorkList(data.data.content))
       .catch((error) => console.error("Error fetching client count:", error));
@@ -36,11 +42,17 @@ export default function List() {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
-      <ProcessList
-        handleCreateProcessClick={handleCreateProcessClick}
-        getProcessList={getProcessList}
-        processList={processList}
-      />
+      <div>
+        <ProcessList
+          handleCreateProcessClick={handleCreateProcessClick}
+          getProcessList={getProcessList}
+          processList={processList}
+          page={page}
+          setPage={setPage}
+          size={size}
+          setSize={setSize}
+        />
+      </div>
       <Modal
         isOpen={showModal}
         onRequestClose={handleModalClose}
@@ -60,6 +72,10 @@ export default function List() {
         <JobConsult
           handleModalClose={handleModalClose}
           getProcessList={getProcessList}
+          page={page}
+          setPage={setPage}
+          size={size}
+          setSize={setSize}
         />
         <button onClick={handleModalClose}>Close</button>
       </Modal>
