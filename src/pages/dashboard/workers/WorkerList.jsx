@@ -13,7 +13,7 @@ import { tableDataDummy } from "@/data";
 export default function WorkerList(props) {
     const [workers, setWorkers] = useState();
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(20);
+    const [size, setSize] = useState(100);
 
     const getWorkers = async (page, size) => {
         try {

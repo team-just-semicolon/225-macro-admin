@@ -119,11 +119,11 @@ export default function ClientList({ process, setProcess, processId, getDetail }
       case 'WATCHING':
         return 'green'
       case 'TIMEOUT':
-        return 'yellow'
+        return 'red'
       case 'FAIL':
         return 'gray'
       case 'ERROR':
-        return 'red'
+        return 'yellow'
       default:
         return 'error'
     }
