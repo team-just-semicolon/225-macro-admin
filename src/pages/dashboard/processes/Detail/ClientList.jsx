@@ -1,8 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { Chip, Button, Tooltip, Typography ,Icon} from '@material-tailwind/react'
+import { Chip, Button, Tooltip, Typography, Switch } from '@material-tailwind/react'
 import {
-  ArrowPathIcon,UserCircleIcon
+  ArrowPathIcon, UserCircleIcon
 } from "@heroicons/react/24/solid";
+
+import CustomChip from './Chip'
 
 
 
@@ -11,6 +13,7 @@ const serverUri = 'http://141.164.51.175:225'
 
 
 export default function ClientList({ process, setProcess, processId, getDetail }) {
+  const [showWorkerId, setShowWorkerId] = useState(false);
   const [refreshCount, setRefreshCount] = useState(10)
   const [toggleFilter, setToggleFilter] = useState({
     IDLE: true,
@@ -39,6 +42,10 @@ export default function ClientList({ process, setProcess, processId, getDetail }
   const getStatusCount = (status) => {
     const count = process?.clients?.child?.filter((child) => child.status === status).length;
     return count || 0;
+  };
+
+  const handleWorkerIdToggle = () => {
+    setShowWorkerId(prev => !prev);
   };
 
   const handleRefreshClick = useCallback(() => {
@@ -192,29 +199,32 @@ export default function ClientList({ process, setProcess, processId, getDetail }
             value={`찾기실패 ${getStatusCount('ERROR')}`}
             onClick={() => handleClientIdClick('ERROR')}
           />
+          <Switch
+            label={`워커 아이디 출력`}
+            onClick={() => handleWorkerIdToggle()}
+          />
         </div>
       </div>
-      <div className='flex flex-wrap'>
+      <div className="flex flex-wrap">
         <div className="flex flex-1 flex-wrap gap-2">
-
           {process?.clients?.child?.map(client => {
-            // console.log(toggleFilter[client.status])
             if (toggleFilter[client.status]) return (
-              <Chip
-                key={client.clientId}
-                color={getChipColor(client.status)}
-                value={client.clientId}
-              >
-              </Chip>
+              <div className="relative inline-block">
+                <Chip
+                  key={client.clientId}
+                  color={getChipColor(client.status)}
+                  value={client.clientId}
+                />
+                {showWorkerId && (
+                  <div
+  className="bg-white text-black text-xs rounded-full font-bold w-4 h-4 absolute top-0 right-0 -mt-1 -mr-1 flex justify-center items-center"
+>
+                    {client.workerId}
+                  </div>
+                )}
+              </div>
             )
           })}
-          {/* {process?.clients?.child?.filter(client => client.status === currentStatus).map(client => (
-              <Chip
-                key={client.clientId}
-                color="cyan"
-                value={client.clientId}
-              />
-            ))} */}
         </div>
       </div>
     </div>
