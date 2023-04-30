@@ -8,36 +8,16 @@ import {
     Button
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-
-import { WorkListDataDummy } from "@/data";
+import Pagination from "./Pagination";
 
 export default function TaskList(props) {
-    const { handleCreateProcessClick } = props;
-    const [filterStatus, setFilterStatus] = useState(null);
-    const [processList, setProcessList] = useState([]);
+    const { handleCreateProcessClick , getProcessList, processList, page, setPage,size} = props;
     const navigate = useNavigate()
-    // const [workList, setWorkList] = useState("");
+
 
     useEffect(() => {
-        fetch(`http://141.164.51.175:225/api/process?page=1&size=20`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-                setProcessList(data.data.content)
-            })
-            // .then((data) => setWorkList(data.data.content))
-            .catch((error) => console.error("Error fetching client count:", error));
+        getProcessList(page, size);
     }, []);
-
-    // useEffect(() => {
-    //     console.log(WorkListDataDummy);
-    // }, []);
-
 
     return (
         <Card>
@@ -84,7 +64,7 @@ export default function TaskList(props) {
                     </thead>
                     <tbody>
                         {
-                            processList && processList.map(({ createdAt, endDate, recordId, status, title }) =>
+                            processList && processList.content?.map(({ createdAt, endDate, recordId, status, title }) =>
                                 <tr key={`${recordId}`}
                                     className="cursor-pointer hover:bg-gray-300"
                                     onClick={() => navigate(`${recordId}`)}
@@ -142,71 +122,13 @@ export default function TaskList(props) {
                                 </tr>
                             )
                         }
-                        {/* {WorkListDataDummy && WorkListDataDummy.map(
-                            ({ identifier, recordId, clientCnt, searchKeyword, BroadcastTitle, createdAt, endAt, status }, key) => {
-                                const className = `py-3 px-5 ${key === WorkListDataDummy.length - 1
-                                    ? ""
-                                    : "border-b border-blue-gray-50"
-                                    }`;
-                                const isDoing = status === "doing";
-                                return (
-                                    <tr key={`${recordId}`} className="cursor-pointer hover:bg-gray-300">
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {identifier ?? ''}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {clientCnt ?? ''}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {searchKeyword ?? ''}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {BroadcastTitle ?? ''}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {createdAt ?? ''}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {endAt ?? ''}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Chip
-                                                variant="gradient"
-                                                color={isDoing ? "blue" : "gray"}
-                                                value={status}
-                                                className="py-0.5 px-2 text-[11px] font-medium"
-                                            />
-                                        </td>
-                                        {isDoing && // "doing" 상태일 때만 버튼을 표시
-                                            <td className={className}>
-
-                                                <Button
-                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" // 버튼 스타일링 추가
-                                                    style={{ height: "24px", minWidth: "60px" }} // 버튼 크기 조절
-                                                    disabled={status !== "doing"} // 버튼의 활성화 여부 조건 추가
-                                                >
-                                                    작업 종료
-                                                </Button>
-                                            </td>
-                                        }
-                                    </tr>
-                                );
-                            }
-                        )} */}
                     </tbody>
                 </table>
+                <Pagination
+                    processList={processList}
+                    page={page}
+                    setPage={setPage}
+                />
             </CardBody>
         </Card>
     )

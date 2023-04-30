@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 export default function Pagination(props) {
-    const { workers, page, setPage } = props;
+    const { processList, page, setPage } = props;
 
     return (
         <div className="flex justify-end my-4 pr-4">
             <nav className="inline-flex">
                 <button
                     onClick={() => setPage(page - 1)}
-                    disabled={page <1}
+                    disabled={processList?.first}
                     className="inline-flex items-center justify-center w-8 h-8 rounded-l-md bg-blue-100 text-blue-500 hover:bg-blue-200"
                 >
                     <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
@@ -19,7 +19,7 @@ export default function Pagination(props) {
                         ></path>
                     </svg>
                 </button>
-                {Array.from(Array(workers?.totalPages).keys()).map((n) => (
+                {Array.from(Array(processList?.totalPages).keys()).map((n) => (
                     <button
                         key={n}
                         onClick={() => setPage(n)}
@@ -30,7 +30,7 @@ export default function Pagination(props) {
                 ))}
                 <button
                     onClick={() => setPage(page + 1)}
-                    disabled={workers?.last}
+                    disabled={processList?.last}
                     className="inline-flex items-center justify-center w-8 h-8 rounded-r-md bg-blue-100 text-blue-500 hover:bg-blue-200"
                 >
                     <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">

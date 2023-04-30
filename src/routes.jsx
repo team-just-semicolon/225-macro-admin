@@ -4,7 +4,7 @@ import {
 
 import Workers from "@/pages/dashboard/workers/Main";
 import Processes from "@/pages/dashboard/processes/ProcessList/Main";
-import ProcessDetail from "@/pages/dashboard/processes/Detail";
+import ProcessDetail from "@/pages/dashboard/processes/detail";
 
 const icon = {
   className: "w-5 h-5 text-inherit",

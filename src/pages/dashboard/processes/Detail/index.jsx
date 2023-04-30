@@ -9,25 +9,18 @@ import {
   Input
 } from "@material-tailwind/react";
 
-import ClientList from '@/pages/dashboard/processes/Detail/ClientList';
+import ClientList from '@/pages/dashboard/processes/detail/ClientList';
 
 // const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
 const serverUri = 'http://141.164.51.175:225'
 
 export default function Detail() {
-  const [process, setProcess] = useState([])
+  const [process, setProcess] = useState([]);
+  const [updateProcessDetail, setUpdateProcessDetail] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const location = useLocation()
   const processId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1)
 
-  const [updateProcessDetail, setUpdateProcessDetail] = useState({
-    keyword: '',
-    title: '',
-    createdAt: '',
-    endDate: '',
-    clienstCount: 0,
-    prePageDown: 0
-  })
 
 
   const getDetail = async (processId) => {
@@ -41,11 +34,11 @@ export default function Detail() {
       const responseData = await fetchRes.json()
       if (responseData && responseData.code === 200) {
         const data = responseData.data
-        setProcess({
+        const processedData = {
           ...data,
           clients: {
-            ...data.clients,
-            child: data.clients.child.sort((a, b) => {
+            ...data?.clients,
+            child: data?.clients.child.sort((a, b) => {
               const keyA = Number(a.clientId);
               const keyB = Number(b.clientId);
 
@@ -61,15 +54,15 @@ export default function Detail() {
               return 0;
             })
           }
-        });
-
+        }
+        return processedData;
       }
     } catch (e) {
       console.error(e)
     }
   }
 
-  const handleJobStop = async () => {
+  const handleProcessStop = async () => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -81,10 +74,6 @@ export default function Detail() {
     const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 
     const body = {
-      "keyword": process.keyword,
-      "prePageDown": process.prePageDown,
-      "title": process.title,
-      "method": "findKeyword",
       "endDate": formattedDate,
     }
 
@@ -105,16 +94,67 @@ export default function Detail() {
     }
   }
 
-  const handleEdit = () => {
-    setIsEditing(!isEditing);
-  };
+  const handleEditOn = () =>{
+    setIsEditing(prevIsEditing => !prevIsEditing);
+  }
+
+  const handleProcessEdit = async () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hour = String(currentDate.getHours()).padStart(2, '0');
+    const minute = String(currentDate.getMinutes()).padStart(2, '0');
+    const second = String(currentDate.getSeconds()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
+    const body = {
+      "keyword": updateProcessDetail.keyword,
+      // "interval": updateProcessDetail.keyword,
+      "prePageDown": updateProcessDetail.prePageDown,
+      "title": updateProcessDetail.title,
+      "endDate": formattedDate,
+    }
+
+    console.log('수정 완료')
+
+    try {
+      const fetchRes = await fetch(`${serverUri}/api/process/${processId}`, {
+        method: 'PATCH',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      })
+      const responseData = await fetchRes.json()
+      if (responseData && responseData.code === 200) {
+        console.log('성공')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   useEffect(() => {
     console.log('client list changed: ', process)
   }, [process])
 
   useEffect(() => {
-    getDetail(processId);
+    console.log(isEditing)
+    if(!isEditing) {
+
+      handleProcessEdit();
+    }
+  }, [isEditing])
+
+  useEffect(() => {
+    const fetchDetail = async () => {
+      const detail = await getDetail(processId);
+      setProcess(detail);
+      setUpdateProcessDetail(detail);
+    };
+    fetchDetail();
   }, [])
 
   return (
@@ -124,14 +164,14 @@ export default function Detail() {
           작업 진행 상세
         </Typography>
         <div className="flex items-center">
-          <Button color="cyan" size="sm" onClick={handleEdit} className="px-4 py-2 rounded-md mr-4">
+          <Button color="cyan" size="sm" onClick={handleEditOn} className="px-4 py-2 rounded-md mr-4">
             {isEditing ? "수정 완료" : "수정"}
           </Button>
           <Button
             color="red"
             // buttonType="link"
             size="sm"
-            onClick={handleJobStop} // 추가
+            onClick={handleProcessStop} // 추가
             className="mr-2"
           >
             작업 종료
@@ -146,8 +186,8 @@ export default function Detail() {
             </Typography>
             <Input
               type="text"
-              value={process?.keyword}
-              onChange={(e) => setProcess({ ...process, keyword: e.target.value })}
+              value={updateProcessDetail?.keyword}
+              onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, keyword: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
@@ -159,8 +199,8 @@ export default function Detail() {
             </Typography>
             <Input
               type="text"
-              value={process?.title}
-              onChange={(e) => setProcess({ ...process, title: e.target.value })}
+              value={updateProcessDetail?.title}
+              onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, title: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
@@ -172,8 +212,8 @@ export default function Detail() {
             </Typography>
             <Input
               type="text"
-              value={process?.createdAt}
-              onChange={(e) => setProcess({ ...process, createdAt: e.target.value })}
+              value={updateProcessDetail?.createdAt}
+              onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, createdAt: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
@@ -185,8 +225,8 @@ export default function Detail() {
             </Typography>
             <Input
               type="text"
-              value={process?.endDate}
-              onChange={(e) => setProcess({ ...process, endDate: e.target.value })}
+              value={updateProcessDetail?.endDate}
+              onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, endDate: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
@@ -198,8 +238,8 @@ export default function Detail() {
             </Typography>
             <Input
               type="text"
-              value={process?.clients?.clientsCount}
-              onChange={(e) => setProcess({ ...process?.clients, clientsCount: e.target.value })}
+              value={updateProcessDetail?.clients?.clientsCount}
+              onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail?.clients, clientsCount: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
@@ -211,8 +251,8 @@ export default function Detail() {
             </Typography>
             <Input
               type="text"
-              value={process?.prePageDown}
-              onChange={(e) => setProcess({ ...process, prePageDown: e.target.value })}
+              value={updateProcessDetail?.prePageDown}
+              onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, prePageDown: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
               style={{ gridColumn: "2/3" }} // 자식 요소가 첫 번째 열에 위치하도록 함
