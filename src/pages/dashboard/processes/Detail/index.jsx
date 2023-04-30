@@ -111,29 +111,29 @@ export default function Detail() {
 
     const body = {
       "keyword": updateProcessDetail.keyword,
-      "interval": updateProcessDetail.keyword,
-      "prePageDown": updateProcessDetail.keyword,
-      "title": updateProcessDetail.keyword,
+      // "interval": updateProcessDetail.keyword,
+      "prePageDown": updateProcessDetail.prePageDown,
+      "title": updateProcessDetail.title,
       "endDate": formattedDate,
     }
 
     console.log('수정 완료')
 
-    // try {
-    //   const fetchRes = await fetch(`${serverUri}/api/process/${processId}`, {
-    //     method: 'PATCH',
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify(body)
-    //   })
-    //   const responseData = await fetchRes.json()
-    //   if (responseData && responseData.code === 200) {
-    //     console.log('성공')
-    //   }
-    // } catch (e) {
-    //   console.error(e)
-    // }
+    try {
+      const fetchRes = await fetch(`${serverUri}/api/process/${processId}`, {
+        method: 'PATCH',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      })
+      const responseData = await fetchRes.json()
+      if (responseData && responseData.code === 200) {
+        console.log('성공')
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   useEffect(() => {
