@@ -12,7 +12,7 @@ import { Input } from "@material-tailwind/react";
 
 
 export function JobConsult(props) {
-  const { handleModalClose, getProcessList, page, size} = props;
+  const { handleModalClose, getProcessList, page, size } = props;
   const [idleClientCount, setIdleClientCount] = useState(0);
   const [prePageDown, setPrePageDown] = useState(0);
   const [keyword, setKeyword] = useState("");
@@ -110,7 +110,7 @@ export function JobConsult(props) {
     <Card className="mt-8 mb-4 mx-auto lg:mx-4 max-w-4xl">
       <div className="my-6 text-center">
         <h2 className="text-2xl font-bold mb-2">이용 가능한 클라이언트</h2>
-        <p className="text-sm font-light text-gray-400">현재  <span className="text-red-600">{idleClientCount}</span> 유휴 대기 중인 클라이언트의 수입니다.</p>
+        <p className="text-sm font-light text-gray-400"> 작업 대기 중인 클라이언트 : <span className="text-red-600">{idleClientCount}</span> 개</p>
       </div>
       <CardBody className="flex items-center justify-center" >
         <div className="px-4 pb-4">

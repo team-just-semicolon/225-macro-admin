@@ -60,28 +60,30 @@ export default function ClientList({ process, processId, fetchDetail }) {
   }, []);
 
   const handleFailRestart = async () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const hour = String(currentDate.getHours()).padStart(2, '0');
-    const minute = String(currentDate.getMinutes()).padStart(2, '0');
-    const second = String(currentDate.getSeconds()).padStart(2, '0');
+    // console.log('Failed to restart')
+    // const currentDate = new Date();
+    // const year = currentDate.getFullYear();
+    // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    // const day = String(currentDate.getDate()).padStart(2, '0');
+    // const hour = String(currentDate.getHours()).padStart(2, '0');
+    // const minute = String(currentDate.getMinutes()).padStart(2, '0');
+    // const second = String(currentDate.getSeconds()).padStart(2, '0');
 
-    const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-
-    let failClients = process?.clients?.child?.filter(client => client.status === 'FAIL').map(client => client);
-
-    failClients.forEach(async (client) => {
+    // const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+    // console.log(process.clients)
+    const failedClients = process?.clients?.child?.filter(client => client.status === 'ERROR')
+    console.log(failedClients)
+    failedClients.map(async (client) => {
       const body = {
-        clientId: client.clientId,
-        title: process?.clients.title,
-        keyword: process?.clients.keyword,
-        target: "FAIL",
+        // clientId: client.clientId,
+        title: process?.title,
+        keyword: process?.keyword,
         method: "findKeyword",
         prePageDown: 0,
-        execurationAt: formattedDate,
-        endDate: formattedDate
+        endDate: client.expirationDate,
+        interval: process?.interval
+        // commandId: client.commands[0].commandId ?? 0,
+        // target: client.commands[0].target ?? 'both'
       };
 
       try {
@@ -90,18 +92,23 @@ export default function ClientList({ process, processId, fetchDetail }) {
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify({
+            status: "IDLE",
+            commandId: client.commands[0].commandId ?? 0,
+            target: client.commands[0].target ?? 'both'
+          })
         });
 
         const responseData = await fetchRes.json();
 
         if (responseData && responseData.code === 200) {
-          console.log('성공');
+          fetchDetail()
         }
       } catch (e) {
         console.error(e);
       }
     });
+
   };
 
   const handleStatusChange = async (status) => {
@@ -120,7 +127,8 @@ export default function ClientList({ process, processId, fetchDetail }) {
       })
       const responseData = await fetchRes.json()
       if (responseData && responseData.code === 200) {
-        console.log('성공')
+        fetchDetail()
+        setClientOpen(false)
       }
     } catch (e) {
       console.error(e)
@@ -157,7 +165,8 @@ export default function ClientList({ process, processId, fetchDetail }) {
       })
       const responseData = await fetchRes.json()
       if (responseData && responseData.code === 200) {
-        console.log('성공')
+        fetchDetail()
+        setClientOpen(false)
       }
     } catch (e) {
       console.error(e)
@@ -241,8 +250,8 @@ export default function ClientList({ process, processId, fetchDetail }) {
                   <span>{`${refreshCount} 초 전`}</span>
                 </Button>
               </Tooltip>
-              <Tooltip content="문자열 찾기에 실패한 모든 클라이언트에게 수동 재실행 명령을 보내줍니다.">
-                <Button color='teal' onClick={handleFailRestart} className="whitespace-nowrap" disabled>수동 재실행 </Button>
+              <Tooltip content="문자열 찾기에 실패한 모든 클라이언트에게 대기중 전환 명령을 보내줍니다.">
+                <Button color='teal' onClick={handleFailRestart} className="whitespace-nowrap">실패클라 대기중 전환</Button>
               </Tooltip>
             </div>
           </div>
@@ -286,7 +295,8 @@ export default function ClientList({ process, processId, fetchDetail }) {
           />
           <Switch
             label={`작업 PC 번호 출력`}
-            onClick={() => handleWorkerIdToggle()}
+            onClick={() => setShowWorkerId(!showWorkerId)}
+            ripple={showWorkerId}
             defaultChecked
           />
         </div>
@@ -295,8 +305,9 @@ export default function ClientList({ process, processId, fetchDetail }) {
         <div className="flex flex-1 flex-wrap gap-2">
           {process?.clients?.child?.map(client => {
             if (toggleFilter[client.status]) return (
-              <div className="relative inline-block cursor-pointer">
+              <div key={client.clientId} className="relative inline-block cursor-pointer">
                 <Chip
+                  className='min-w-[50px] text-center'
                   key={client.clientId}
                   color={getChipColor(client.status)}
                   value={client.clientId}
@@ -382,6 +393,7 @@ export default function ClientList({ process, processId, fetchDetail }) {
           </div>
         </DialogBody>
         <DialogFooter>
+          <Button color='red' onClick={() => setClientOpen(false)}> 닫기 </Button>
         </DialogFooter>
       </Dialog>
     </div>

@@ -13,7 +13,7 @@ import { WorkListDataDummy } from "@/data";
 export default function WorkerList(props) {
     const [workers, setWorkers] = useState();
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(100);
+    const [size, setSize] = useState(500);
 
     const getWorkers = async (page, size) => {
         try {
@@ -84,7 +84,7 @@ export default function WorkerList(props) {
                                     }`;
 
                                 return (
-                                    <tr key={`${machineID}`} className="cursor-pointer hover:bg-gray-300">
+                                    <tr key={key} className="cursor-pointer hover:bg-gray-300">
                                         <td className={className}>
                                             <div className="flex items-center gap-4">
                                                 <div
