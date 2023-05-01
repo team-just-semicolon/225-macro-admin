@@ -94,31 +94,14 @@ export default function Detail() {
     }
   }
 
-  const handleEditOn = () =>{
-    setIsEditing(prevIsEditing => !prevIsEditing);
-  }
-
   const handleProcessEdit = async () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const hour = String(currentDate.getHours()).padStart(2, '0');
-    const minute = String(currentDate.getMinutes()).padStart(2, '0');
-    const second = String(currentDate.getSeconds()).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-
     const body = {
       "keyword": updateProcessDetail.keyword,
       // "interval": updateProcessDetail.keyword,
       "prePageDown": updateProcessDetail.prePageDown,
       "title": updateProcessDetail.title,
-      "endDate": formattedDate,
+      "endDate": updateProcessDetail.endDate,
     }
-
-    console.log('수정 완료')
-
     try {
       const fetchRes = await fetch(`${serverUri}/api/process/${processId}`, {
         method: 'PATCH',
@@ -129,24 +112,14 @@ export default function Detail() {
       })
       const responseData = await fetchRes.json()
       if (responseData && responseData.code === 200) {
-        console.log('성공')
+        console.log('수정 요청 성공')
       }
+      setIsEditing(false)
     } catch (e) {
       console.error(e)
     }
+
   }
-
-  useEffect(() => {
-    console.log('client list changed: ', process)
-  }, [process])
-
-  useEffect(() => {
-    console.log(isEditing)
-    if(!isEditing) {
-
-      handleProcessEdit();
-    }
-  }, [isEditing])
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -164,18 +137,20 @@ export default function Detail() {
           작업 진행 상세
         </Typography>
         <div className="flex items-center">
-          <Button color="cyan" size="sm" onClick={handleEditOn} className="px-4 py-2 rounded-md mr-4">
-            {isEditing ? "수정 완료" : "수정"}
+          <Button color="cyan" size="sm" onClick={() => setIsEditing(!isEditing)} className={`px-4 py-2 rounded-md mr-4 ${isEditing ? 'bg-red-500' : ''}`}>
+            {isEditing ? "취소" : "수정"}
           </Button>
-          <Button
-            color="red"
-            // buttonType="link"
-            size="sm"
-            onClick={handleProcessStop} // 추가
-            className="mr-2"
-          >
-            작업 종료
-          </Button>
+          {!isEditing &&
+            <Button
+              color="red"
+              // buttonType="link"
+              size="sm"
+              onClick={handleProcessStop} // 추가
+              className="mr-2"
+            >
+              작업 종료
+            </Button>
+          }
         </div>
       </CardHeader>
       <CardBody className="">
@@ -259,6 +234,12 @@ export default function Detail() {
             />
           </div>
         </div>
+        {isEditing &&
+          <div className='flex gap-2 justify-end'>
+            <Button color="blue" size="sm" onClick={handleProcessEdit}>수정완료</Button>
+            <Button color="red" size="sm" onClick={() => setIsEditing(false)}>수정취소</Button>
+          </div>
+        }
         <div className="w-full">
           <ClientList
             process={process}

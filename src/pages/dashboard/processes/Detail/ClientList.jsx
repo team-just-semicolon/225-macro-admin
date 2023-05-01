@@ -19,7 +19,7 @@ const serverUri = 'http://141.164.51.175:225'
 
 
 export default function ClientList({ process, setProcess, processId, getDetail }) {
-  const [showWorkerId, setShowWorkerId] = useState(false);
+  const [showWorkerId, setShowWorkerId] = useState(true);
   const [refreshCount, setRefreshCount] = useState(10)
   const [clientOpen, setClientOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState('');
@@ -129,11 +129,12 @@ export default function ClientList({ process, setProcess, processId, getDetail }
     });
   };
 
-  const handleStatusChange = async(status) => {
+  const handleStatusChange = async (status) => {
     const body = {
-      "status": status,    
+      "status": status,
+      "commandId": 0
     }
-    
+
     try {
       const fetchRes = await fetch(`${serverUri}/api/client/${selectedClient.clientId}`, {
         method: 'PATCH',
@@ -164,8 +165,8 @@ export default function ClientList({ process, setProcess, processId, getDetail }
 
     const body = {
       "method": command,
-      "commandId" : 0,
-      "workerId":  selectedClient.workerId,
+      "commandId": 0,
+      "workerId": selectedClient.workerId,
     }
 
     console.log(body);
@@ -309,8 +310,9 @@ export default function ClientList({ process, setProcess, processId, getDetail }
             onClick={() => handleClientIdClick('ERROR')}
           />
           <Switch
-            label={`워커 아이디 출력`}
+            label={`작업 PC 번호 출력`}
             onClick={() => handleWorkerIdToggle()}
+            defaultChecked
           />
         </div>
       </div>
@@ -318,7 +320,7 @@ export default function ClientList({ process, setProcess, processId, getDetail }
         <div className="flex flex-1 flex-wrap gap-2">
           {process?.clients?.child?.map(client => {
             if (toggleFilter[client.status]) return (
-              <div className="relative inline-block">
+              <div className="relative inline-block cursor-pointer">
                 <Chip
                   key={client.clientId}
                   color={getChipColor(client.status)}
@@ -327,7 +329,7 @@ export default function ClientList({ process, setProcess, processId, getDetail }
                 />
                 {showWorkerId && (
                   <div
-                    className="bg-white text-black text-xs rounded-full font-bold w-4 h-4 absolute top-0 right-0 -mt-1 -mr-1 flex justify-center items-center"
+                    className="border border-gray-700 bg-white text-black text-xs rounded-full font-bold w-4 h-4 absolute top-0 right-0 -mt-1 -mr-1 flex justify-center items-center"
                   >
                     {client.workerId}
                   </div>
