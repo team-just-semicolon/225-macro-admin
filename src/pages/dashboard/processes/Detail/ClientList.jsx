@@ -18,7 +18,7 @@ import {
 const serverUri = 'http://141.164.51.175:225'
 
 
-export default function ClientList({ process, setProcess, processId, getDetail }) {
+export default function ClientList({ process, processId, fetchDetail }) {
   const [showWorkerId, setShowWorkerId] = useState(true);
   const [refreshCount, setRefreshCount] = useState(10)
   const [clientOpen, setClientOpen] = useState(false);
@@ -31,31 +31,6 @@ export default function ClientList({ process, setProcess, processId, getDetail }
     FAIL: true,
     ERROR: true
   })
-
-  const updateClient = async (clientId) => {
-    const body = {
-      // "status": ,
-      // "commandId": ,
-      // "target": ,
-    }
-    try {
-      const fetchRes = await fetch(`${serverUri}/api/client/${clientId}`, {
-        method: 'PATCH',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-
-      const responseData = await fetchRes.json();
-
-      if (responseData && responseData.code === 200) {
-        console.log('성공');
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
 
   const handleOpen = (client) => {
@@ -80,7 +55,7 @@ export default function ClientList({ process, setProcess, processId, getDetail }
   };
 
   const handleRefreshClick = useCallback(() => {
-    getDetail(processId);
+    fetchDetail();
     setRefreshCount(10);
   }, []);
 
@@ -205,10 +180,10 @@ export default function ClientList({ process, setProcess, processId, getDetail }
   }, [process])
   useEffect(() => {
     if (refreshCount === 0) {
-      getDetail(processId);
+      fetchDetail()
       setRefreshCount(10)
     }
-  }, [refreshCount, getDetail, processId])
+  }, [refreshCount, processId])
 
   const getChipColor = (status) => {
     switch (status) {

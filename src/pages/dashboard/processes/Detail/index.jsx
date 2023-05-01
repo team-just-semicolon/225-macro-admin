@@ -121,12 +121,12 @@ export default function Detail() {
 
   }
 
+  const fetchDetail = async () => {
+    const detail = await getDetail(processId);
+    setProcess(detail);
+    setUpdateProcessDetail(detail);
+  };
   useEffect(() => {
-    const fetchDetail = async () => {
-      const detail = await getDetail(processId);
-      setProcess(detail);
-      setUpdateProcessDetail(detail);
-    };
     fetchDetail();
   }, [])
 
@@ -243,9 +243,8 @@ export default function Detail() {
         <div className="w-full">
           <ClientList
             process={process}
-            setProcess={setProcess}
             processId={processId}
-            getDetail={getDetail}
+            fetchDetail={fetchDetail}
           />
         </div>
       </CardBody>
