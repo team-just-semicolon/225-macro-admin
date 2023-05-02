@@ -4,16 +4,27 @@ import {
     CardHeader,
     CardBody,
     Typography,
-    Chip,
-    Button
+    Tooltip,
+    Button,
 } from "@material-tailwind/react";
-import Pagination from "./Pagination";
-import { WorkListDataDummy } from "@/data";
+import {
+    ArrowPathIcon
+} from "@heroicons/react/24/solid";
 
-export default function WorkerList(props) {
-    const [workers, setWorkers] = useState();
+import Pagination from "./Pagination";
+import ExpandedUI from "./ExpandedUI";
+// import { WorkListDataDummy } from "@/data";
+
+export default function WorkerList() {
+    const [refreshCount, setRefreshCount] = useState(10)
+
+    const [disconnectedWorkers, setDisconnectedWorkers] = useState([])
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(500);
+    const [size, setSize] = useState(1000);
+    const [contentArray, setContentArray] = useState({})
+
+
+
 
     const getWorkers = async (page, size) => {
         try {
@@ -31,19 +42,58 @@ export default function WorkerList(props) {
         }
     }
 
+    async function fetchWorkers() {
+        const workers = await getWorkers(page, size);
+        const workersWithIndex = workers.map((worker, index) => {
+            return { ...worker, index: index + 1 };
+        });
+        // console.log(workersWithIndex)
+        // let arr = []
+        const groupedData = workersWithIndex.reduce((groups, item) => {
+            const { workerId } = item;
+            if (!groups[workerId]) {
+                groups[workerId] = [];
+            }
+            groups[workerId].push(item);
+            return groups;
+        }, {});
+        // console.log(groupedData)
+        // console.log(Object.keys(groupedData))
+        const groupedKeys = Object.keys(groupedData)
+        let disconnectedWorkers = [];
+        for (let i = 1; i < 51; i++) {
+            if (groupedKeys.includes(String(i))) {
+                // console.log(i, '있음')
+            } else {
+                // console.log(i, '없음')
+                disconnectedWorkers.push(i)
+            }
+        }
+        setDisconnectedWorkers(disconnectedWorkers)
+        // console.log(Object.values(groupedData))
+        setContentArray(groupedData)
+    }
+    const handleRefreshClick = React.useCallback(() => {
+        fetchWorkers();
+        setRefreshCount(10);
+    }, []);
+    useEffect(() => {
+        fetchWorkers();
+        const reduceCount = setInterval(() => {
+            setRefreshCount((prev) => prev - 1 >= 0 ? prev - 1 : 0);
+        }, 1000)
+
+        return () => {
+            clearInterval(reduceCount)
+        }
+    }, []);
 
     useEffect(() => {
-        async function fetchWorkers() {
-            const workers = await getWorkers(page, size);
-            const workersWithIndex = workers.map((worker, index) => {
-                return { ...worker, index: index + 1 };
-            });
-            setWorkers(workersWithIndex);
+        if (refreshCount === 0) {
+            fetchWorkers()
+            setRefreshCount(10)
         }
-        fetchWorkers();
-    }, [page, size]);
-
-
+    }, [refreshCount])
     // useEffect(() => {
     //     setWorkers(WorkListDataDummy);
     // }, []);
@@ -55,74 +105,40 @@ export default function WorkerList(props) {
                 <Typography variant="h6" color="white">
                     작업 컴퓨터 리스트
                 </Typography>
+                <Tooltip content="클릭 시 클라이언트들의 상태를 즉시 새로고침 합니다.">
+                    <Button color='indigo' onClick={handleRefreshClick} className="flex items-center whitespace-nowrap">
+                        <ArrowPathIcon className="w-5 h-5 text-inherit" />
+                        <span>{`${refreshCount} 초 전`}</span>
+                    </Button>
+                </Tooltip>
             </CardHeader>
-            <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
-                <table className="w-full min-w-[640px] table-auto">
-                    <thead>
-                        <tr>
-                            {["컴퓨터 정보", "연결 일시", "업데이트 시간", "상태"].map((el) => (
-                                <th
-                                    key={el}
-                                    className="border-b border-blue-gray-50 py-3 px-5 text-left"
-                                >
-                                    <Typography
-                                        variant="small"
-                                        className="text-[11px] font-bold uppercase text-blue-gray-400"
-                                    >
-                                        {el}
-                                    </Typography>
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {workers && workers.map(
-                            ({ index, machineID, createdAt, updatedAt, status, number, ip, mac, clients, online, date }, key) => {
-                                const className = `py-3 px-5 ${key === workers.length - 1
-                                    ? ""
-                                    : "border-b border-blue-gray-50"
-                                    }`;
+            <CardBody className=" px-0 pt-0 pb-2">
+                <div className="flex gap-4">
+                    <div>
+                        <span className="text-red-500 mr-2">총 연결 작업 PC 개수:</span>
+                        {Object.keys(contentArray).length}
+                    </div>
+                    <div>
+                        <span className="text-red-500 mr-2">미연결 PC:</span>
+                        {disconnectedWorkers.map(worker => <span className="mr-2">{worker}</span>)}
+                    </div>
 
-                                return (
-                                    <tr key={key} className="cursor-pointer hover:bg-gray-300">
-                                        <td className={className}>
-                                            <div className="flex items-center gap-4">
-                                                <div
-                                                    className="bg-gray-200 w-8 py-2 px-1 rounded-md text-center"
-                                                >
-                                                    {index}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {createdAt}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                                                {updatedAt}
-                                            </Typography>
-                                        </td>
-                                        <td className={className}>
-                                            <Chip
-                                                variant="gradient"
-                                                color={"blue-gray"}
-                                                value={status}
-                                                className="py-0.5 px-2 text-[11px] font-medium"
-                                            />
-                                        </td>
-                                    </tr>
-                                );
-                            }
-                        )}
-                    </tbody>
-                </table>
-                <Pagination
+                </div>
+                {Object.keys(contentArray).length !== 0 && Object.keys(contentArray).map((workerKey, index) =>
+                    // console.log(contentArray[workerKey])
+
+                    <ExpandedUI
+                        key={index}
+                        number={workerKey}
+                        clients={contentArray[workerKey]}
+                        fetchWorkers={fetchWorkers}
+                    />
+                )}
+                {/* <Pagination
                     workers={workers}
                     page={page}
                     setPage={setPage}
-                />
+                /> */}
             </CardBody>
         </Card>
     )
