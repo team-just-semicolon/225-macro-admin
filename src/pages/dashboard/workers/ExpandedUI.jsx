@@ -30,17 +30,18 @@ export default function ExpandedUI({ number, clients, fetchWorkers }) {
   const sendToWorkerChildClient = async (method) => {
     try {
       clients.map(async (client) => {
-        const res = await fetch(`http://141.164.51.175:225/api/client/${client.clientId}`, {
+        await fetch(`http://141.164.51.175:225/api/client/${client.clientId}`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            method, commandId: 0
+            method,
+            workerId: number,
+            groupId: Math.floor((number - 1) / 10) + 1
           })
         })
       })
-      console.log('메세지 전송 완료', res)
     } catch (e) {
       console.error('error occured while sending request', e)
     }
