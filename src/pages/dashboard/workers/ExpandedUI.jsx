@@ -95,7 +95,7 @@ export default function ExpandedUI({ number, clients, fetchWorkers }) {
           <Typography variant="h6">
             [주의] {number}번 PC 하위의 모든 vm을 대상으로 동작합니다
           </Typography>
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 mt-1">
             <Button className="flex-1 bg-gray-500"
               onClick={() => sendToWorkerChildClient('clearCache')}
             >

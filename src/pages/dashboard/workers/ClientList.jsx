@@ -221,7 +221,10 @@ export default function ClientList({ clients, fetchDetail = () => { } }) {
 
     return (
         <div>
-            <div className="flex flex-wrap">
+            <Typography variant="h6">
+                클라이언트 상태
+            </Typography>
+            <div className="flex flex-wrap p-4">
                 <div className="flex flex-1 flex-wrap gap-2">
                     {clients.map(client => {
                         if (toggleFilter[client.status]) return (

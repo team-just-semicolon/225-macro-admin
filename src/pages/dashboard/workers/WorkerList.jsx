@@ -124,16 +124,16 @@ export default function WorkerList() {
                     </div>
 
                 </div>
-                {Object.keys(contentArray).length !== 0 && Object.keys(contentArray).map((workerKey, index) =>
-                    // console.log(contentArray[workerKey])
-
-                    <ExpandedUI
-                        key={index}
-                        number={workerKey}
-                        clients={contentArray[workerKey]}
-                        fetchWorkers={fetchWorkers}
-                    />
-                )}
+                <div className="flex flex-col gap-4">
+                    {Object.keys(contentArray).length !== 0 && Object.keys(contentArray).map((workerKey, index) =>
+                        <ExpandedUI
+                            key={index}
+                            number={workerKey}
+                            clients={contentArray[workerKey]}
+                            fetchWorkers={fetchWorkers}
+                        />
+                    )}
+                </div>
                 {/* <Pagination
                     workers={workers}
                     page={page}
