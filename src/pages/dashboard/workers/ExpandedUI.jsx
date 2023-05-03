@@ -63,27 +63,27 @@ export default function ExpandedUI({ number, clients, fetchWorkers }) {
           <div className='flex flex-row gap-1'>
             {countByStatus('IDLE') !== 0 &&
 
-              <Chip color='cyan' value={countByStatus('IDLE')} />
+              <Chip color='cyan' value={`대기: ${countByStatus('IDLE')}`} className='w-20' />
             }
             {countByStatus('RUNNING') !== 0 &&
 
-              <Chip color='blue' value={countByStatus('RUNNING')} />
+              <Chip color='blue' value={`동작: ${countByStatus('RUNNING')}`} className='w-20' />
             }
             {countByStatus('WATCHING') !== 0 &&
 
-              <Chip color='green' value={countByStatus('WATCHING')} />
+              <Chip color='green' value={`시청: ${countByStatus('WATCHING')}`} className='w-20' />
             }
             {countByStatus('FAIL') !== 0 &&
 
-              <Chip color='gray' value={countByStatus('FAIL')} />
+              <Chip color='gray' value={`재실행: ${countByStatus('FAIL')}`} className='w-20' />
             }
             {countByStatus('ERROR') !== 0 &&
 
-              <Chip color='yellow' value={countByStatus('ERROR')} />
+              <Chip color='yellow' value={`실패: ${countByStatus('ERROR')}`} className='w-20' />
             }
             {countByStatus('TIMEOUT') !== 0 &&
 
-              <Chip color='red' value={countByStatus('TIMEOUT')} />
+              <Chip color='red' value={`연결불량: ${countByStatus('TIMEOUT')}`} className='w-20' />
             }
           </div>
         </div>
