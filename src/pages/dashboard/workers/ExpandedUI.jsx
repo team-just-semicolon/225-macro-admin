@@ -56,7 +56,7 @@ export default function ExpandedUI({ number, clients, fetchWorkers }) {
           <div className='flex'>
 
             <span>
-              {number}번 PC
+            {number <= 50 ? `${number}번 데스크탑 PC` : `${number}번 워크스테이션 PC`}
             </span>
             <Typography className="text-gray-600" variant="h6">({clients.length})</Typography>
           </div>

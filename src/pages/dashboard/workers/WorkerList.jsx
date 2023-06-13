@@ -17,11 +17,12 @@ import ExpandedUI from "./ExpandedUI";
 
 export default function WorkerList() {
     const [refreshCount, setRefreshCount] = useState(10)
-
+    const [connectedWorkers, setConnectedWorkers] = useState({})
     const [disconnectedWorkers, setDisconnectedWorkers] = useState([])
+    const [filteredWorkers, setFilteredWorkers] = useState([]);
+    const [selectedPCType, setSelectedPCType] = useState('all');
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(1000);
-    const [contentArray, setContentArray] = useState({})
 
 
 
@@ -44,11 +45,11 @@ export default function WorkerList() {
 
     async function fetchWorkers() {
         const workers = await getWorkers(page, size);
+
         const workersWithIndex = workers.map((worker, index) => {
             return { ...worker, index: index + 1 };
         });
-        // console.log(workersWithIndex)
-        // let arr = []
+
         const groupedData = workersWithIndex.reduce((groups, item) => {
             const { workerId } = item;
             if (!groups[workerId]) {
@@ -57,26 +58,53 @@ export default function WorkerList() {
             groups[workerId].push(item);
             return groups;
         }, {});
-        // console.log(groupedData)
-        // console.log(Object.keys(groupedData))
-        const groupedKeys = Object.keys(groupedData)
+
+        const groupedKeys = Object.keys(groupedData);
         let disconnectedWorkers = [];
+
         for (let i = 1; i < 51; i++) {
             if (groupedKeys.includes(String(i))) {
                 // console.log(i, '있음')
             } else {
                 // console.log(i, '없음')
-                disconnectedWorkers.push(i)
+                disconnectedWorkers.push(i);
             }
         }
-        setDisconnectedWorkers(disconnectedWorkers)
-        // console.log(Object.values(groupedData))
-        setContentArray(groupedData)
+
+        setDisconnectedWorkers(disconnectedWorkers);
+        setConnectedWorkers(groupedData);
     }
+
+    const filterWorkersByPC = (pcType) => {
+        setSelectedPCType(pcType); // 새로운 상태 업데이트
+        if (pcType === 'all') {
+            setFilteredWorkers([]); 
+        } else {
+            const filteredKeys = Object.keys(connectedWorkers).filter((workerKey) => {
+                const isDesktop = Number(workerKey) <= 50;
+                const isWorkstation = Number(workerKey) > 50;
+
+                if (pcType === 'desktop' && isDesktop) {
+                    return true;
+                } else if (pcType === 'workstation' && isWorkstation) {
+                    return true;
+                }
+
+                return false;
+            });
+
+            setFilteredWorkers(filteredKeys);
+        }
+    };
+
+
+
+
     const handleRefreshClick = React.useCallback(() => {
         fetchWorkers();
         setRefreshCount(10);
     }, []);
+
     useEffect(() => {
         fetchWorkers();
         const reduceCount = setInterval(() => {
@@ -116,24 +144,41 @@ export default function WorkerList() {
                 <div className="flex gap-4">
                     <div>
                         <span className="text-red-500 mr-2">총 연결 작업 PC 개수:</span>
-                        {Object.keys(contentArray).length}
+                        {Object.keys(connectedWorkers).length}
                     </div>
                     <div>
                         <span className="text-red-500 mr-2">미연결 PC:</span>
                         {disconnectedWorkers.map(worker => <span className="mr-2">{worker}</span>)}
                     </div>
-
+                    <div>
+                        <span className="text-red-500 mr-2">PC 필터링:</span>
+                        <select
+                            value={selectedPCType} // value 변경
+                            onChange={(e) => filterWorkersByPC(e.target.value)}
+                            className="bg-white border border-gray-300 rounded px-2 py-1"
+                        >
+                            <option value="all">전체</option>
+                            <option value="desktop">데스크탑</option>
+                            <option value="workstation">워크스테이션</option>
+                        </select>
+                    </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                    {Object.keys(contentArray).length !== 0 && Object.keys(contentArray).map((workerKey, index) =>
-                        <ExpandedUI
-                            key={index}
-                            number={workerKey}
-                            clients={contentArray[workerKey]}
-                            fetchWorkers={fetchWorkers}
-                        />
-                    )}
+                    {Object.keys(connectedWorkers).length !== 0 && Object.keys(connectedWorkers).map((workerKey, index) => {
+                        if (filteredWorkers.length === 0 || filteredWorkers.includes(workerKey)) {
+                            return (
+                                <ExpandedUI
+                                    key={index}
+                                    number={workerKey}
+                                    clients={connectedWorkers[workerKey]}
+                                    fetchWorkers={fetchWorkers}
+                                />
+                            );
+                        }
+                        return null;
+                    })}
                 </div>
+
                 {/* <Pagination
                     workers={workers}
                     page={page}
