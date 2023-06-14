@@ -141,16 +141,16 @@ export default function WorkerList() {
                 </Tooltip>
             </CardHeader>
             <CardBody className=" px-0 pt-0 pb-2">
-                <div className="flex gap-4">
-                    <div>
+                <div className="flex gap-4 items-center">
+                    <div className="flex items-center">
                         <span className="text-red-500 mr-2">총 연결 작업 PC 개수:</span>
                         {Object.keys(connectedWorkers).length}
                     </div>
-                    <div>
+                    <div className="flex items-center">
                         <span className="text-red-500 mr-2">미연결 PC:</span>
                         {disconnectedWorkers.map(worker => <span className="mr-2">{worker}</span>)}
                     </div>
-                    <div>
+                    <div className="flex items-center">
                         <span className="text-red-500 mr-2">PC 필터링:</span>
                         <select
                             value={selectedPCType} // value 변경
