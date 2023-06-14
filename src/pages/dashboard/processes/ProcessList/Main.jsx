@@ -4,9 +4,6 @@ import Modal from "react-modal";
 import ProcessList from './ProcessList';
 import JobConsult from "./JobConsult";
 
-import { ProcessListtDataDummy } from "@/data";
-
-
 export default function List() {
   const [showModal, setShowModal] = useState(false);
   const [processList, setProcessList] = useState([]);
