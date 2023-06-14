@@ -62,7 +62,8 @@ export default function List() {
             bottom: "auto",
             marginRight: "-50%",
             transform: "translate(-50%, -50%)",
-            // maxWidth: "60%"
+            maxHeight: '750px', // or any value according to your needs
+            overflowY: 'auto'
           },
         }}
       >
