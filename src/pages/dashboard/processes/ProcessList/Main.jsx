@@ -75,7 +75,6 @@ export default function List() {
           size={size}
           setSize={setSize}
         />
-        <button onClick={handleModalClose}>Close</button>
       </Modal>
     </div>
   );

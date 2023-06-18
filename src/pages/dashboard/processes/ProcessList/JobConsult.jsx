@@ -117,7 +117,7 @@ export function JobConsult(props) {
       </div>
       <CardBody className="flex items-center justify-center" >
         <div className="px-4 pb-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4" style={{ gridAutoRows: "minmax(0, 1fr)" }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <Card key={'1'} color="transparent" shadow={false} className="flex flex-col">
               <CardBody className="p-4 flex-grow flex flex-col">
                 <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">                                                    
