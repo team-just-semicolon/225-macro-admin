@@ -65,6 +65,9 @@ export default function List() {
             maxHeight: '750px', // or any value according to your needs
             overflowY: 'auto'
           },
+          overlay: {
+            zIndex: 51,
+          }
         }}
       >
         <JobConsult
