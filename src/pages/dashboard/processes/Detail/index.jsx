@@ -133,7 +133,7 @@ export default function Detail() {
   }, [])
 
   useEffect(() => {
-   console.log(updateProcessDetail)
+    console.log(updateProcessDetail)
   }, [updateProcessDetail])
 
   return (
@@ -160,7 +160,7 @@ export default function Detail() {
         </div>
       </CardHeader>
       <CardBody className="">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-2">
           <div className="mb-4 flex flex-row items-center">
             <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>
               검색 키워드
@@ -171,7 +171,7 @@ export default function Detail() {
               onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, keyword: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
-              style={{ gridColumn: "2/3" }} 
+              style={{ gridColumn: "2/3" }}
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
@@ -197,7 +197,7 @@ export default function Detail() {
               onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, createdAt: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
-              style={{ gridColumn: "2/3" }} 
+              style={{ gridColumn: "2/3" }}
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
@@ -210,7 +210,7 @@ export default function Detail() {
               onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, endDate: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
-              style={{ gridColumn: "2/3" }} 
+              style={{ gridColumn: "2/3" }}
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
@@ -223,7 +223,7 @@ export default function Detail() {
               onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail?.clients, clientsCount: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
-              style={{ gridColumn: "2/3" }} 
+              style={{ gridColumn: "2/3" }}
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
@@ -236,7 +236,7 @@ export default function Detail() {
               onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, prePageDown: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
-              style={{ gridColumn: "2/3" }} 
+              style={{ gridColumn: "2/3" }}
             />
           </div>
           <div className="mb-4 flex flex-row items-center">
@@ -249,7 +249,7 @@ export default function Detail() {
               onChange={(e) => setUpdateProcessDetail({ ...updateProcessDetail, url: e.target.value })}
               className="w-full mt-1 px-2 py-1 text-sm"
               disabled={!isEditing}
-              style={{ gridColumn: "2/3" }} 
+              style={{ gridColumn: "2/3" }}
             />
           </div>
         </div>

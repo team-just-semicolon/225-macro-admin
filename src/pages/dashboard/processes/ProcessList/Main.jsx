@@ -62,11 +62,14 @@ export default function List() {
             // bottom: "auto",
             // marginRight: "-50%",
             // transform: "translate(-50%, -50%)",
-            maxWidth: '90vw', // or any value according to your needs
+            width: '90vw', // or any value according to your needs
             maxHeight: '90vh', // or any value according to your needs
             overflowY: 'auto',
+            background: 'none',
             padding: 0,
-            border: 'none'
+            border: 'none',
+            display: 'flex',
+            justifyContent: 'center',
           },
           overlay: {
             zIndex: 51,

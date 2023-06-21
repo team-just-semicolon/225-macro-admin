@@ -1,16 +1,17 @@
+import { select } from "@material-tailwind/react";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const TimePicker = ({ initialTime, endTime, setEndTime, showTimePicker, setShowTimePicker }) => {
-    const [selectedDateTime, setSelectedDateTime] = useState(endTime || new Date());
+    const [selectedDateTime, setSelectedDateTime] = useState(new Date());
     const currentTime = new Date();
-    const [minTime, setMinTime] = useState(new Date(currentTime.getTime() + 60 * 1000)); 
-    const [maxTime, setMaxTime] = useState(new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), 23, 59, 59)); 
+    const [minTime, setMinTime] = useState(new Date(currentTime.getTime() + 60 * 1000));
+    const [maxTime, setMaxTime] = useState(new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), 23, 59, 59));
 
     const handleDateChange = (date) => {
         setEndTime(date);
-
+        console.log(selectedDateTime)
         if (date && date.getHours() !== selectedDateTime.getHours() || date.getMinutes() !== selectedDateTime.getMinutes()) {
             setShowTimePicker(false);
         }
@@ -23,9 +24,9 @@ const TimePicker = ({ initialTime, endTime, setEndTime, showTimePicker, setShowT
 
             // 오늘 날짜인 경우 mintime 초기값을 현재 시간 이후로 설정
             if (date.toDateString() === new Date().toDateString()) {
-                setMinTime(new Date(currentTime.getTime() + 60000)); 
+                setMinTime(new Date(currentTime.getTime() + 60000));
             } else {
-                setMinTime(new Date(0, 0, 0, 0, 0, 0)); 
+                setMinTime(new Date(0, 0, 0, 0, 0, 0));
             }
         }
     };

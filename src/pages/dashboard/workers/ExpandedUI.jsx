@@ -103,7 +103,7 @@ export default function ExpandedUI({ number, clients, fetchWorkers, findKeywordP
       <AccordionHeader
         className='p-4'
       >
-        <div className='flex flex-row gap-4'>
+        <div className='flex sm:flex-col lg:flex-row  gap-4'>
           <div className='flex'>
 
             <span>
