@@ -9,7 +9,9 @@ import {
 } from "@material-tailwind/react";
 import { Input } from "@material-tailwind/react";
 
-
+import {
+  XCircleIcon
+} from "@heroicons/react/24/solid";
 
 export function JobConsult(props) {
   const { handleModalClose, getProcessList, page, size } = props;
@@ -111,8 +113,13 @@ export function JobConsult(props) {
 
   return (
     <Card className="mt-4 mb-2 mx-auto lg:mx-2 max-w-4xl overflow-y-auto">
+      <div>
+        <XCircleIcon className="w-8 absolute right-2"
+          onClick={handleModalClose}
+        />
+      </div>
       <div className="my-6 text-center">
-        <h2 className="text-2xl font-bold mb-2">이용 가능한 클라이언트</h2>
+        <h2 className="text-2xl font-bold mb-2">프로세스 생성하기</h2>
         <p className="text-sm font-light text-gray-400"> 작업 대기 중인 클라이언트 : <span className="text-red-600">{idleClientCount}</span> 개</p>
       </div>
       <CardBody className="flex items-center justify-center" >
