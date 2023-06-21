@@ -17,11 +17,11 @@ export function JobConsult(props) {
   const [prePageDown, setPrePageDown] = useState(0);
   const [keyword, setKeyword] = useState("");
   const [title, setTitle] = useState("");
-  const [operationInterval, setOperationInterval] = useState();
+  const [operationInterval, setOperationInterval] = useState(1);
   const [clientOperationCount, setClientOperationCount] = useState("");
   const [requestDomain, setRequestDomain] = useState("");
 
-  const [endTime, setEndTime] = useState(null);
+  const [endTime, setEndTime] = useState(new Date().setHours(new Date().getHours() + 1));
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const [img, setImg] = useState();
@@ -120,7 +120,7 @@ export function JobConsult(props) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <Card key={'1'} color="transparent" shadow={false} className="flex flex-col">
               <CardBody className="p-4 flex-grow flex flex-col">
-                <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">                                                    
+                <Typography variant="h6" color="blue-gray" className="mt-1 mb-2">
                   검색 키워드
                 </Typography>
                 <Typography variant="small" className="text-blue-gray-500 mb-1">
@@ -214,7 +214,7 @@ export function JobConsult(props) {
                 <Typography variant="small" className="font-normal text-blue-gray-500">
                   영상 시청을 조회할 이미지를 업로드 합니다.
                 </Typography>
-                <ImageUploader className="h-full w-full" img={img} setImg={setImg} /> 
+                <ImageUploader className="h-full w-full" img={img} setImg={setImg} />
               </CardBody>
             </Card>
             <Card key={'8'} color="transparent" shadow={false} className="flex flex-col">
@@ -226,6 +226,31 @@ export function JobConsult(props) {
                   영상 시청을 조회할 URL을 설정합니다.
                 </Typography>
                 <Input required size="md" className="h-full w-full" value={requestDomain} onChange={(e) => setRequestDomain(e.target.value)} />
+                <div className="flex flex-col">
+                  <Typography variant="h4" className="font-normal mt-5">
+                    Presets
+                  </Typography>
+                  <div className=" mb-2">
+                    <span>
+                      망작두
+                    </span>
+                    <Button className="ml-2 p-2" onClick={() => {
+                      setRequestDomain('https://i.imgur.com/bce15rB.png')
+                    }}>
+                      붙여넣기
+                    </Button>
+                  </div>
+                  <div>
+                    <span>
+                      벳츠비
+                    </span>
+                    <Button className="ml-2 p-2" onClick={() => {
+                      setRequestDomain('https://i.imgur.com/bkDGGPv.png')
+                    }}>
+                      붙여넣기
+                    </Button>
+                  </div>
+                </div>
               </CardBody>
             </Card>
           </div>
