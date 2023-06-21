@@ -141,7 +141,7 @@ export default function WorkerList() {
 
     return (
         <div>
-            <div className="flex flex-col mb-8 bg-white p-2 rounded-sm gap-4">
+            {/* <div className="flex flex-col mb-8 bg-white p-2 rounded-sm gap-4">
                 <div>
                     <Typography variant="h3" color="blue-gray" className="mt-1 mb-2">
                         문자열 찾기 프리셋 설정
@@ -207,7 +207,7 @@ export default function WorkerList() {
                         )}
                     </div>
                 </div>
-            </div>
+            </div> */}
             <Card>
                 <CardHeader variant="gradient" color="blue" className="mb-8 p-6 flex justify-between items-center">
                     <Typography variant="h6" color="white">
