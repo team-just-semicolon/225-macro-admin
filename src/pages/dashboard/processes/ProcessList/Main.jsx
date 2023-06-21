@@ -56,14 +56,16 @@ export default function List() {
         contentLabel="Job Consult Modal"
         style={{
           content: {
-            top: "50%",
-            left: "60%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-            maxHeight: '750px', // or any value according to your needs
-            overflowY: 'auto'
+            // top: "50%",
+            // left: "60%",
+            // right: "auto",
+            // bottom: "auto",
+            // marginRight: "-50%",
+            // transform: "translate(-50%, -50%)",
+            maxWidth: '90vw', // or any value according to your needs
+            maxHeight: '90vh', // or any value according to your needs
+            overflowY: 'auto',
+            padding: 0
           },
           overlay: {
             zIndex: 51,
