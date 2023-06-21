@@ -65,7 +65,8 @@ export default function List() {
             maxWidth: '90vw', // or any value according to your needs
             maxHeight: '90vh', // or any value according to your needs
             overflowY: 'auto',
-            padding: 0
+            padding: 0,
+            border: 'none'
           },
           overlay: {
             zIndex: 51,
