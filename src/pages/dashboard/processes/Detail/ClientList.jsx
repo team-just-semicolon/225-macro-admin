@@ -97,9 +97,9 @@ export default function ClientList({ process, processId, fetchDetail }) {
 
         const responseData = await fetchRes.json();
 
-        if (responseData && responseData.code === 200) {
-          fetchDetail()
-        }
+        // if (responseData && responseData.code === 200) {
+        //   fetchDetail()
+        // }
       } catch (e) {
         console.error(e);
       }
