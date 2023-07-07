@@ -14,8 +14,8 @@ import {
 
 
 
-// const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
-const serverUri = 'http://141.164.51.175:225'
+// const serverUri = process.env.NODE_ENV === 'development' ? 'http://158.247.252.131:225' : 'https://macro-server.com';
+const serverUri = 'http://158.247.252.131:225'
 
 
 export default function ClientList({ process, processId, fetchDetail }) {

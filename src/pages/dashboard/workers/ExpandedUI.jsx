@@ -35,7 +35,7 @@ export default function ExpandedUI({ number, clients, fetchWorkers, findKeywordP
         const term = 30 + (index * findKeywordProps.operationInterval)
         const startDateTime = new Date()
         startDateTime.setSeconds(startDateTime.getSeconds() + term)
-        await fetch(`http://141.164.51.175:225/api/client/${client.clientId}`, {
+        await fetch(`http://158.247.252.131:225/api/client/${client.clientId}`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"
@@ -63,7 +63,7 @@ export default function ExpandedUI({ number, clients, fetchWorkers, findKeywordP
   const handleStatusChange = async (status) => {
     try {
       clients.map(async (client) => {
-        await fetch(`http://141.164.51.175:225/api/client/${client.clientId}`, {
+        await fetch(`http://158.247.252.131:225/api/client/${client.clientId}`, {
           method: 'PATCH',
           headers: {
             "Content-Type": "application/json"
@@ -81,7 +81,7 @@ export default function ExpandedUI({ number, clients, fetchWorkers, findKeywordP
   const sendToWorkerChildClient = async (method) => {
     try {
       clients.map(async (client) => {
-        await fetch(`http://141.164.51.175:225/api/client/${client.clientId}`, {
+        await fetch(`http://158.247.252.131:225/api/client/${client.clientId}`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"

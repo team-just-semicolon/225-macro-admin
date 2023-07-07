@@ -30,7 +30,7 @@ export function JobConsult(props) {
 
   const getIdleClientCount = async () => {
     try {
-      const response = await fetch(`http://141.164.51.175:225/api/client/IDLE?size=10000`, {
+      const response = await fetch(`http://158.247.252.131:225/api/client/IDLE?size=10000`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ export function JobConsult(props) {
       prePageDown: prePageDown,
       url: requestDomain
     }
-    fetch(`http://141.164.51.175:225/api/command/${clientOperationCount}`, {
+    fetch(`http://158.247.252.131:225/api/command/${clientOperationCount}`, {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
@@ -242,7 +242,7 @@ export function JobConsult(props) {
                       망작두
                     </span>
                     <Button className="ml-2 p-2" onClick={() => {
-                      setRequestDomain('https://i.imgur.com/bce15rB.png')
+                      setRequestDomain('https://i.imgur.com/yQlObDs.png')
                     }}>
                       붙여넣기
                     </Button>
@@ -252,7 +252,17 @@ export function JobConsult(props) {
                       벳츠비
                     </span>
                     <Button className="ml-2 p-2" onClick={() => {
-                      setRequestDomain('https://i.imgur.com/bkDGGPv.png')
+                      setRequestDomain('https://i.imgur.com/FQAO915.png')
+                    }}>
+                      붙여넣기
+                    </Button>
+                  </div>
+                  <div>
+                    <span>
+                      이브
+                    </span>
+                    <Button className="ml-2 p-2" onClick={() => {
+                      setRequestDomain('https://i.imgur.com/yA3pyNG.png')
                     }}>
                       붙여넣기
                     </Button>
