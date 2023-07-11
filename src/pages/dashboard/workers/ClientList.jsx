@@ -3,7 +3,7 @@ import {
     Chip, Button, Tooltip, Typography, Switch, Dialog,
     DialogHeader,
     DialogBody,
-    DialogFooter, Select, Option
+    DialogFooter, Select, Option, Input
 } from '@material-tailwind/react'
 import {
     ArrowPathIcon, UserCircleIcon
@@ -14,8 +14,8 @@ import {
 
 
 
-// const serverUri = process.env.NODE_ENV === 'development' ? 'http://158.247.252.131:225' : 'https://macro-server.com';
-const serverUri = 'http://158.247.252.131:225'
+// const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+const serverUri = 'http://141.164.51.175:225'
 
 
 export default function ClientList({ clients, fetchDetail = () => { } }) {
@@ -31,11 +31,15 @@ export default function ClientList({ clients, fetchDetail = () => { } }) {
         FAIL: true,
         ERROR: true
     })
+    const [id, setId] = useState('')
+    const [pw, setPw] = useState('')
 
 
     const handleOpen = (client) => {
         setClientOpen(!clientOpen);
         setSelectedClient(client);
+        setId('')
+        setPw('')
     }
 
     //   const handleClientIdClick = (status) => {
@@ -130,7 +134,37 @@ export default function ClientList({ clients, fetchDetail = () => { } }) {
             console.error(e)
         }
     }
+    const handleSendAccount = async () => {
 
+        const body = {
+            "method": 'accountInfo',
+            "commandId": 0,
+            "workerId": selectedClient.workerId,
+            "clientId": selectedClient.clientId,
+            "title": id,
+            "keyword": pw
+        }
+
+        // console.log(body);
+        // console.log(command)
+
+        try {
+            const fetchRes = await fetch(`${serverUri}/api/client/${selectedClient.clientId}`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            })
+            const responseData = await fetchRes.json()
+            if (responseData && responseData.code === 200) {
+                // fetchDetail()
+                setClientOpen(false)
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
     const handleSubmitCommand = async (command) => {
 
         const body = {
@@ -312,6 +346,28 @@ export default function ClientList({ clients, fetchDetail = () => { } }) {
                                     새로 고침
                                 </Button>
                             </div>
+                        </div>
+                    </div>
+                    <div className="mt-5 p-4 border border-gray-300 rounded-md">
+                        <h3 className="mb-4 font-bold text-xs">로그인용 계정 전송하기</h3>
+                        <div className='flex flex-row gap-2 mb-2'>
+                            <Input
+                                label='아이디'
+                                type='string'
+                                value={id}
+                                onChange={(e) => setId(e.target.value)}
+                            />
+                            <Input
+                                label='비밀번호'
+                                type='string'
+                                value={pw}
+                                onChange={(e) => setPw(e.target.value)}
+                            />
+                        </div>
+                        <div className='flex justify-end'>
+                            <Button onClick={() => handleSendAccount()}>
+                                전송하기
+                            </Button>
                         </div>
                     </div>
                 </DialogBody>

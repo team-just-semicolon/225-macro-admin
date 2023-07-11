@@ -11,8 +11,8 @@ import {
 
 import ClientList from '@/pages/dashboard/processes/detail/ClientList';
 
-// const serverUri = process.env.NODE_ENV === 'development' ? 'http://158.247.252.131:225' : 'https://macro-server.com';
-const serverUri = 'http://158.247.252.131:225'
+// const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+const serverUri = 'http://141.164.51.175:225'
 
 export default function Detail() {
   const [process, setProcess] = useState([]);
@@ -136,12 +136,33 @@ export default function Detail() {
     console.log(updateProcessDetail)
   }, [updateProcessDetail])
 
+  const sendToWorkerChildClient = async (method) => {
+    try {
+      process.clients.child.map(async (client) => {
+        await fetch(`http://141.164.51.175:225/api/client/${client.clientId}`, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            method,
+            workerId: client.workerId,
+            groupId: Math.floor((client.workerId - 1) / 10) + 1
+          })
+        })
+      })
+    } catch (e) {
+      console.error('error occured while sending request', e)
+    }
+  }
+
   return (
     <Card className="mt-10">
       <CardHeader variant="gradient" color="blue" className="mb-8 p-6 flex justify-between items-center">
         <Typography variant="h6" color="white">
           작업 진행 상세
         </Typography>
+
         <div className="flex items-center">
           <Button color="cyan" size="sm" onClick={() => setIsEditing(!isEditing)} className={`px-4 py-2 rounded-md mr-4 ${isEditing ? 'bg-red-500' : ''}`}>
             {isEditing ? "취소" : "수정"}
@@ -159,7 +180,34 @@ export default function Detail() {
           }
         </div>
       </CardHeader>
-      <CardBody className="">
+      <CardBody className=" pt-0">
+        <div className='p-4 border border-gray-200 rounded'>
+          <Typography variant="h5 mb-1">
+            [주의] 이 프로세스({processId})에 할당된 vm을 대상으로 동작합니다
+          </Typography>
+          <div className="flex gap-4 mt-1">
+            <Button className="flex-1 bg-gray-500"
+              onClick={() => sendToWorkerChildClient('clearCache')}
+            >
+              캐시 지우기
+            </Button>
+            <Button className="flex-1 bg-gray-500"
+              onClick={() => sendToWorkerChildClient('moveToMain')}
+            >
+              메인으로 이동
+            </Button>
+            <Button className="flex-1 bg-gray-500"
+              onClick={() => sendToWorkerChildClient('refresh')}
+            >
+              렌더러 새로고침
+            </Button>
+            <Button className="flex-1 bg-gray-500"
+              onClick={() => sendToWorkerChildClient('reboot')}
+            >
+              vm 재기동
+            </Button>
+          </div>
+        </div>
         <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-2">
           <div className="mb-4 flex flex-row items-center">
             <Typography variant="small" className="whitespace-nowrap font-normal text-blue-gray-500" style={{ width: '9em' }}>

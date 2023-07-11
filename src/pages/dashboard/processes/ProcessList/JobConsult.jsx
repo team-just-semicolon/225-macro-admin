@@ -30,7 +30,7 @@ export function JobConsult(props) {
 
   const getIdleClientCount = async () => {
     try {
-      const response = await fetch(`http://158.247.252.131:225/api/client/IDLE?size=10000`, {
+      const response = await fetch(`http://141.164.51.175:225/api/client/IDLE?size=10000`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ export function JobConsult(props) {
       prePageDown: prePageDown,
       url: requestDomain
     }
-    fetch(`http://158.247.252.131:225/api/command/${clientOperationCount}`, {
+    fetch(`http://141.164.51.175:225/api/command/${clientOperationCount}`, {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
@@ -262,7 +262,7 @@ export function JobConsult(props) {
                       이브
                     </span>
                     <Button className="ml-2 p-2" onClick={() => {
-                      setRequestDomain('https://i.imgur.com/yA3pyNG.png')
+                      setRequestDomain('https://i.imgur.com/LM6KDGU.png')
                     }}>
                       붙여넣기
                     </Button>
