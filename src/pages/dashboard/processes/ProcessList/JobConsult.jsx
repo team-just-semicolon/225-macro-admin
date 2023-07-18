@@ -269,6 +269,26 @@ export function JobConsult(props) {
                   </div>
                   <div>
                     <span>
+                      꼬마
+                    </span>
+                    <Button className="ml-2 p-2" onClick={() => {
+                      setRequestDomain('https://i.imgur.com/pwvox9n.png')
+                    }}>
+                      붙여넣기
+                    </Button>
+                  </div>
+                  <div>
+                    <span>
+                      악귀
+                    </span>
+                    <Button className="ml-2 p-2" onClick={() => {
+                      setRequestDomain('https://i.imgur.com/Hrn8suH.png')
+                    }}>
+                      붙여넣기
+                    </Button>
+                  </div>
+                  <div>
+                    <span>
                       두목곰
                     </span>
                     <Button className="ml-2 p-2" onClick={() => {
