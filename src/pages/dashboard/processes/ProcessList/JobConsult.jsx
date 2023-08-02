@@ -307,6 +307,16 @@ export function JobConsult(props) {
                       붙여넣기
                     </Button>
                   </div>
+                  <div>
+                    <span>
+                      박경영
+                    </span>
+                    <Button className="ml-2 p-2" onClick={() => {
+                      setRequestDomain('https://i.imgur.com/KcqlEHV.png')
+                    }}>
+                      붙여넣기
+                    </Button>
+                  </div>
                 </div>
               </CardBody>
             </Card>
