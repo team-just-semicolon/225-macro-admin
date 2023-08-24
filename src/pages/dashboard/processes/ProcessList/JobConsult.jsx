@@ -249,36 +249,6 @@ export function JobConsult(props) {
                   </div>
                   <div>
                     <span>
-                      벳츠비
-                    </span>
-                    <Button className="ml-2 p-2" onClick={() => {
-                      setRequestDomain('https://i.imgur.com/FQAO915.png')
-                    }}>
-                      붙여넣기
-                    </Button>
-                  </div>
-                  <div>
-                    <span>
-                      이브
-                    </span>
-                    <Button className="ml-2 p-2" onClick={() => {
-                      setRequestDomain('https://i.imgur.com/LM6KDGU.png')
-                    }}>
-                      붙여넣기
-                    </Button>
-                  </div>
-                  <div>
-                    <span>
-                      꼬마
-                    </span>
-                    <Button className="ml-2 p-2" onClick={() => {
-                      setRequestDomain('https://i.imgur.com/pwvox9n.png')
-                    }}>
-                      붙여넣기
-                    </Button>
-                  </div>
-                  <div>
-                    <span>
                       악귀
                     </span>
                     <Button className="ml-2 p-2" onClick={() => {
@@ -302,7 +272,7 @@ export function JobConsult(props) {
                       독종
                     </span>
                     <Button className="ml-2 p-2" onClick={() => {
-                      setRequestDomain('https://i.imgur.com/wLu1IBa.png')
+                      setRequestDomain('https://i.imgur.com/Da7sa6S.png')
                     }}>
                       붙여넣기
                     </Button>
