@@ -3,7 +3,7 @@ import { Button, Typography } from "@material-tailwind/react";
 export function AllClientController() {
   const sendToAllClient = async (method) => {
     try {
-      const res = await fetch('http://141.164.51.175:225/api/client', {
+      const res = await fetch('http://43.203.200.170/api/api/client', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
@@ -20,7 +20,7 @@ export function AllClientController() {
 
   const handleStatusChange = async (status) => {
     try {
-      await fetch(`http://141.164.51.175:225/api/client`, {
+      await fetch(`http://43.203.200.170/api/api/client`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"

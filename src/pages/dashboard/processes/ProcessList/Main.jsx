@@ -19,7 +19,7 @@ export default function List() {
   };
 
   const getProcessList = (page, size) => {
-    fetch(`http://141.164.51.175:225/api/process?page=${page}&size=${size}`, {
+    fetch(`http://43.203.200.170/api/api/process?page=${page}&size=${size}`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json"

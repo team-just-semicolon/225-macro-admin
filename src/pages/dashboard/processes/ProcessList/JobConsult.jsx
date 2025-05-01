@@ -30,7 +30,7 @@ export function JobConsult(props) {
 
   const getIdleClientCount = async () => {
     try {
-      const response = await fetch(`http://141.164.51.175:225/api/client/IDLE?size=10000`, {
+      const response = await fetch(`http://43.203.200.170/api/api/client/IDLE?size=10000`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ export function JobConsult(props) {
       prePageDown: prePageDown,
       url: requestDomain
     }
-    fetch(`http://141.164.51.175:225/api/command/${clientOperationCount}`, {
+    fetch(`http://43.203.200.170/api/api/command/${clientOperationCount}`, {
       method: "POST",
       body: JSON.stringify(body),
       headers: {

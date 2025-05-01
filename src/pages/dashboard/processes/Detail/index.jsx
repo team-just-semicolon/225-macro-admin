@@ -11,7 +11,7 @@ import {
 
 import ClientList from '@/pages/dashboard/processes/Detail/ClientList';
 
-// const serverUri = process.env.NODE_ENV === 'development' ? 'http://141.164.51.175:225' : 'https://macro-server.com';
+// const serverUri = process.env.NODE_ENV === 'development' ? 'http://43.203.200.170/api' : 'https://macro-server.com';
 const serverUri = 'http://43.203.200.170/api'
 
 export default function Detail() {
@@ -139,7 +139,7 @@ export default function Detail() {
   const sendToWorkerChildClient = async (method) => {
     try {
       process.clients.child.map(async (client) => {
-        await fetch(`http://141.164.51.175:225/api/client/${client.clientId}`, {
+        await fetch(`http://43.203.200.170/api/api/client/${client.clientId}`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"
