@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ImageUploader from "./ImageUpLoader";
+import ImageUploader from "./ImageUploader";
 import TimePicker from "./TimePicker"
 import {
   Card,
